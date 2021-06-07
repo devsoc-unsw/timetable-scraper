@@ -40,6 +40,28 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 	res.send("todo");
 };
 
+// returns 
+// {
+// 	"Term": {
+// 	  "BuildingID": {
+// 		"RoomID": {
+// 		  "name": "RoomName",
+// 		  "Week": {
+// 			"Day": [
+// 			  {
+// 				"courseCode": "courseCodeText",
+// 				"start": "Time_Text",
+// 				"end": "Time_Text"
+// 			  }
+// 			]
+// 		  }
+// 		}
+// 	  }
+// 	}
+//   }
+const getFreeRoomsData = (req: express.Request, res: express.Response) => {
+
+}
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
 app.get('/api/terms/:termId/courses', getCourseList);
 
