@@ -42,7 +42,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 
 // returns 
 // {
-// 	"Term": {
+
 // 	  "BuildingID": {
 // 		"RoomID": {
 // 		  "name": "RoomName",
@@ -60,6 +60,34 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 // 	}
 //   }
 const getFreeRoomsData = (req: express.Request, res: express.Response) => {
+	// year is set at 2020 for now
+	const data = await timetableScraper(2020);
+	let FreeRoomsData = {};
+	// for property in data:
+		// let course_code = data["courseCode"];
+		// let course_code_text = data["name"];
+		// declare all variables used inside for loops here so you can merge later
+		// 
+		// for i in data["classes"]
+			// ?? what happens if mode != in-person - must account for this
+		// below is an array - could use .foreach  }
+		// for i in data["classes"]["times"]
+			// building_id = ?? // must split the location string somehow??
+			// room_id = ??
+			// room_name = ??
+			// day = data["classes"]["times"]["day"]
+			// start: =  data["classes"]["times"]["time"]["start"]
+			// end: =  data["classes"]["times"]["time"]["end"]
+			//create an object with all the information for the course for each week for this class of this course
+			// let weeks = data["classes"]["times"]["weeks"]
+			// for i in range(weeks) {
+			// 	add building id and to freeRooms data
+			// must make if and else statements to ensure that there aren't multiple keys of the same data
+			// }
+			// }
+			// 
+
+	// for each
 
 }
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
