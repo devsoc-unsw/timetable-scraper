@@ -61,8 +61,8 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 //   }
 const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 	// year is set at 2020 for now
-	const data = await timetableScraper(2020);
-	let FreeRoomsData = {};
+	res.send(timetableData);
+	//let FreeRoomsData = {};
 	// for property in data:
 		// let course_code = data["courseCode"];
 		// let course_code_text = data["name"];
@@ -81,7 +81,7 @@ const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 			//create an object with all the information for the course for each week for this class of this course
 			// let weeks = data["classes"]["times"]["weeks"]
 			// for i in range(weeks) {
-			// 	add building id and to freeRooms data
+			// 	add building id and to freeRoomsData
 			// must make if and else statements to ensure that there aren't multiple keys of the same data
 			// }
 			// }
@@ -92,6 +92,7 @@ const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 }
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
 app.get('/api/terms/:termId/courses', getCourseList);
+app.get('/api/freerooms', getFreeRoomsData);
 
 app.use((_, res, next) => {
 	// update to match the domain you will make the request from
