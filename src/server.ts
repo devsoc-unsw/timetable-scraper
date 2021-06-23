@@ -61,8 +61,8 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 //   }
 const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 	// year is set at 2020 for now
-	res.send(timetableData);
-	//let FreeRoomsData = {};
+
+	let FreeRoomsData = {};
 	// for property in data:
 		// let course_code = data["courseCode"];
 		// let course_code_text = data["name"];
