@@ -64,10 +64,16 @@ const getAllData = (req: express.Request, res: express.Response) => {
 }
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
+
+setTimeout(function() {
 	let freeroomsData = {};
-	// focus on T1
 	let data = timetableData["Summer"];
+
+	// // focus on T1
 	console.log(data);
+
+	// summer is an object -> should be a list
+
 
 	for (let course of data) {
 		if (course["mode"] != "In Person") {
@@ -84,119 +90,133 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 			let [campus, buildingId, roomId] = locationId.split("-");
 			buildingId = campus + "-" + buildingId;
 			roomId = roomId.slice(0, -1);
-			let day = timeElement["day"];
-			let start = timeElement["time"["start"]];
-			let end = timeElement["time"["end"]];
-			let weeks = timeElement["weeks"];
-			// case 1: "weeks": 11
-			// case 2: "weeks":"1-11",
-			// case 3: "weeks" : 3, 5, 7
-			// case 4: "weeks": "1-2, 3-5, 7-10"
 
-			if (!weeks.includes(",") && !weeks.includes("-")) {
-				// case 1: "weeks": one number e.g. 11
-			} else if (!weeks.includes(",")) {
-				// case 2: "weeks": one range e.g. 1-11
-				let [startRange, endRange] = weeks.split["-"];
-				// turn string into a decimal number after splitting
-				startRange = parseInt(startRange, 10);
-				endRange = parseInt(endRange, 10);
-
-				for (let currentWeek = startRange; currentWeek < endRange; currentWeek++) {
-					if (freeroomsData[buildingId] === undefined) {
-						freeroomsData[buildingId] = {
-							roomId: {
-								"name": roomName,
-								currentWeek : {
-									day : [ {
-										courseCode : courseName,
-										"start" : start,
-										"end" : end,
-										}
-									],
-								}
-							}
-						}
-					} else if (freeroomsData[buildingId][roomId] === undefined) {
-						freeroomsData[buildingId] = {
-							roomId: {
-								"name": roomName,
-								currentWeek : {
-									day : [ {
-										courseCode : courseName,
-										"start" : start,
-										"end" : end,
-										}
-									],
-								}
-							}
-						}
-					// if roomId exists, then roomName should also exist - given to us as e.g. (K-E19-104)
-					// } else if (freeroomsData[buildingId][roomId][roomName] === undefined) {
-					// 	freeroomsData[buildingId][roomId] = {
-					// 		"name": roomName,
-					// 		currentWeek : {
-					// 			day : [ {
-					// 				courseCode : courseName,
-					// 				"start" : start,
-					// 				"end" : end,
-					// 				}
-					// 			],
-					// 		}
-					// 	}
-					} else if (freeroomsData[buildingId][roomId][currentWeek] === undefined) {
-						freeroomsData[buildingId][roomId][currentWeek] = {
-							day : [ {
-								courseCode : courseName,
-								"start" : start,
-								"end" : end,
-							}
-							],
-						}							
-					} else if (freeroomsData[buildingId][roomId][currentWeek][day] === undefined) {
-						freeroomsData[buildingId][roomId][currentWeek][day] = [
-							{
-								courseCode : courseName,
-								"start" : start,
-								"end" : end,
-							},
-						]
-					} else {
-						freeroomsData[buildingId][roomId][currentWeek][day].push({
-							courseCode : courseName,
-							"start" : start,
-							"end" : end,
-						})							
-					}
-						
-				}	
-					
-
-			} else if (!weeks.includes("-")) {
-				// case 3: "weeks": list of numbers e.g. 3,5,7...
-				
-			} else {
-				// case 4: "weeks": list of ranges e.g. 1-2, 3-4 etc.
+			freeroomsData = {
+				"buildingId" : buildingId,
+				"roomId" : roomId,
+				"roomName" : roomName,
 			}
 
-			// Putting it into freeroomsData
-	
-	// 		break;
-	// 	}
-	//  	break;
-	// }
-	// // for i in data["classes"]["times"]
-			///...
-	// 	// day = data["classes"]["times"]["day"]
-	// 	// start: =  data["classes"]["times"]["time"]["start"]
-	// 	// end: =  data["classes"]["times"]["time"]["end"]
-	// 	//create an object with all the information for the course for each week for this class of this course
-	// 	// let weeks = data["classes"]["times"]["weeks"]
-	// 	// for i in range(weeks) {
-	// 	// 	add building id and to freeRoomsData
-	// 	// must make if and else statements to ensure that there aren't multiple keys of the same data
+			break;
+		}
+	break;
+	}
+	// 		let day = timeElement["day"];
+	// 		let start = timeElement["time"["start"]];
+	// 		let end = timeElement["time"["end"]];
+	// 		let weeks = timeElement["weeks"];
+	// 		// case 1: "weeks": 11
+	// 		// case 2: "weeks":"1-11",
+	// 		// case 3: "weeks" : 3, 5, 7
+	// 		// case 4: "weeks": "1-2, 3-5, 7-10"
 
-	//res.send(freeroomsData);
+	// 		if (!weeks.includes(",") && !weeks.includes("-")) {
+	// 			// case 1: "weeks": one number e.g. 11
+	// 		} else if (!weeks.includes(",")) {
+	// 			// case 2: "weeks": one range e.g. 1-11
+	// 			let [startRange, endRange] = weeks.split["-"];
+	// 			// turn string into a decimal number after splitting
+	// 			startRange = parseInt(startRange, 10);
+	// 			endRange = parseInt(endRange, 10);
+
+	// 			for (let currentWeek = startRange; currentWeek < endRange; currentWeek++) {
+	// 				if (freeroomsData[buildingId] === undefined) {
+	// 					freeroomsData[buildingId] = {
+	// 						roomId: {
+	// 							"name": roomName,
+	// 							currentWeek : {
+	// 								day : [ {
+	// 									courseCode : courseName,
+	// 									"start" : start,
+	// 									"end" : end,
+	// 									}
+	// 								],
+	// 							}
+	// 						}
+	// 					}
+	// 				} else if (freeroomsData[buildingId][roomId] === undefined) {
+	// 					freeroomsData[buildingId] = {
+	// 						roomId: {
+	// 							"name": roomName,
+	// 							currentWeek : {
+	// 								day : [ {
+	// 									courseCode : courseName,
+	// 									"start" : start,
+	// 									"end" : end,
+	// 									}
+	// 								],
+	// 							}
+	// 						}
+	// 					}
+	// 				// if roomId exists, then roomName should also exist - given to us as e.g. (K-E19-104)
+	// 				// } else if (freeroomsData[buildingId][roomId][roomName] === undefined) {
+	// 				// 	freeroomsData[buildingId][roomId] = {
+	// 				// 		"name": roomName,
+	// 				// 		currentWeek : {
+	// 				// 			day : [ {
+	// 				// 				courseCode : courseName,
+	// 				// 				"start" : start,
+	// 				// 				"end" : end,
+	// 				// 				}
+	// 				// 			],
+	// 				// 		}
+	// 				// 	}
+	// 				} else if (freeroomsData[buildingId][roomId][currentWeek] === undefined) {
+	// 					freeroomsData[buildingId][roomId][currentWeek] = {
+	// 						day : [ {
+	// 							courseCode : courseName,
+	// 							"start" : start,
+	// 							"end" : end,
+	// 						}
+	// 						],
+	// 					}							
+	// 				} else if (freeroomsData[buildingId][roomId][currentWeek][day] === undefined) {
+	// 					freeroomsData[buildingId][roomId][currentWeek][day] = [
+	// 						{
+	// 							courseCode : courseName,
+	// 							"start" : start,
+	// 							"end" : end,
+	// 						},
+	// 					]
+	// 				} else {
+	// 					freeroomsData[buildingId][roomId][currentWeek][day].push({
+	// 						courseCode : courseName,
+	// 						"start" : start,
+	// 						"end" : end,
+	// 					})							
+	// 				}
+						
+	// 			}	
+					
+
+	// 		} else if (!weeks.includes("-")) {
+	// 			// case 3: "weeks": list of numbers e.g. 3,5,7...
+				
+	// 		} else {
+	// 			// case 4: "weeks": list of ranges e.g. 1-2, 3-4 etc.
+	// 		}
+
+	// 		// Putting it into freeroomsData
+	
+	// // 		break;
+	// // 	}
+	// //  	break;
+	// // }
+	// // // for i in data["classes"]["times"]
+	// 		///...
+	// // 	// day = data["classes"]["times"]["day"]
+	// // 	// start: =  data["classes"]["times"]["time"]["start"]
+	// // 	// end: =  data["classes"]["times"]["time"]["end"]
+	// // 	//create an object with all the information for the course for each week for this class of this course
+	// // 	// let weeks = data["classes"]["times"]["weeks"]
+	// // 	// for i in range(weeks) {
+	// // 	// 	add building id and to freeRoomsData
+	// // 	// must make if and else statements to ensure that there aren't multiple keys of the same data
+
+	// //res.send(freeroomsData);
+	res.send(freeroomsData);
+	
+}, 60000);
 }
 
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
