@@ -62,34 +62,122 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 	// year is set at 2020 for now
 
-	let FreeRoomsData = {};
-	// for property in data:
-		// let course_code = data["courseCode"];
-		// let course_code_text = data["name"];
-		// declare all variables used inside for loops here so you can merge later
-		// 
-		// for i in data["classes"]
-			// ?? what happens if mode != in-person - must account for this
-		// below is an array - could use .foreach  }
-		// for i in data["classes"]["times"]
-			// building_id = ?? // must split the location string somehow??
-			// room_id = ??
-			// room_name = ??
-			// day = data["classes"]["times"]["day"]
-			// start: =  data["classes"]["times"]["time"]["start"]
-			// end: =  data["classes"]["times"]["time"]["end"]
-			//create an object with all the information for the course for each week for this class of this course
-			// let weeks = data["classes"]["times"]["weeks"]
-			// for i in range(weeks) {
-			// 	add building id and to freeRoomsData
-			// must make if and else statements to ensure that there aren't multiple keys of the same data
-			// }
-			// }
-			// 
-
-	// for each
-
+  let freeroomsData = {};
+  for (let course of data["T1"]) {
+    let courseCode = course["courseCode"];
+    let courseName = course["name"];
+    for (let classData of course["classes"]) {
+    if (classData["mode"] != "In Person") {
+      continue;
+    }
+  
+    for (let timeElement of classData["times"]) {
+      let [roomName, locationId] = timeElement["location"].split(" (");
+      let [campus, buildingId, roomId] = locationId.split("-");
+  
+      if (!roomId) {
+      continue;
+      }
+  
+      buildingId = campus + "-" + buildingId;
+      roomId = roomId.slice(0, -1);
+  
+      let day = timeElement["day"];
+      let start = timeElement["time"]["start"];
+      let end = timeElement["time"]["end"];
+      let weeks = timeElement["weeks"];
+  
+      // case 1: "weeks": "11"
+      // case 2: "weeks": "1-11",
+      // case 3: "weeks": "3, 5, 7"
+      // case 4: "weeks": "1-2, 3-5, 7-10"
+      // case 5:"weeks": "1-2, 4, 5-7"
+  
+      let allWeeks = weeks.split(", ");
+  
+      for (let tuple in allWeeks) {
+      if (tuple.includes("-")) {
+        // case 1: tuple is a range eg. 1-2
+        let [startRange, endRange] = weeks.split["-"];
+        // turn string into a decimal number after splitting
+        startRange = parseInt(startRange);
+        endRange = parseInt(endRange);
+        for (
+        let currentWeek = startRange;
+        currentWeek <= endRange;
+        currentWeek++
+        ) {
+        inputData(
+          freeroomsData,
+          buildingId,
+          roomId,
+          roomName,
+          currentWeek,
+          day,
+          start,
+          end,
+          courseCode,
+          courseName
+        );
+        }
+      } else {
+        // case 2: tuple is an integer eg. 5
+        let currentWeek = parseInt(tuple);
+        inputData(
+        freeroomsData,
+        buildingId,
+        roomId,
+        roomName,
+        currentWeek,
+        day,
+        start,
+        end,
+        courseCode,
+        courseName
+        );
+      }
+      }
+    }
+    }
+  }
+  console.log(freeroomsData["K-E12"]["114"]);
 }
+	  
+	  
+function inputData(
+  freeroomsData,
+  buildingId,
+  roomId,
+  roomName,
+  currentWeek,
+  day,
+  start,
+  end,
+  courseCode,
+  courseName
+  ) {
+  if (!(buildingId in freeroomsData)) {
+    freeroomsData[buildingId] = {};
+  }
+  if (!(roomId in freeroomsData[buildingId])) {
+    freeroomsData[buildingId][roomId] = {};
+  }
+  if (!(roomName in freeroomsData[buildingId][roomId])) {
+    freeroomsData[buildingId][roomId]["name"] = roomName;
+  }
+  if (!(currentWeek in freeroomsData[buildingId][roomId])) {
+    freeroomsData[buildingId][roomId][currentWeek] = {};
+  }
+  if (!(day in freeroomsData[buildingId][roomId][currentWeek])) {
+    freeroomsData[buildingId][roomId][currentWeek][day] = [];
+  }
+  freeroomsData[buildingId][roomId][currentWeek][day].push({
+    courseCode: courseName,
+    start: start,
+    end: end,
+  });
+ }
+	  
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
 app.get('/api/terms/:termId/courses', getCourseList);
 app.get('/api/freerooms', getFreeRoomsData);
