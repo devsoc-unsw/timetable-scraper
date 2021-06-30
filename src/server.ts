@@ -3,6 +3,7 @@ import { timetableData } from './automatic-scraper';
 
 const app = express();
 const port = process.env.PORT || 3001;
+// Running: npx nodemon --exec TIMETABLE_YEAR=2020 npm start
 
 // Express routes
 
@@ -42,7 +43,6 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 
 // returns 
 // {
-
 // 	  "BuildingID": {
 // 		"RoomID": {
 // 		  "name": "RoomName",
@@ -59,6 +59,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 // 	  }
 // 	}
 //   }
+
 const getFreeRoomsData = (req: express.Request, res: express.Response) => {
 	// year is set at 2020 for now
 
@@ -178,9 +179,15 @@ function inputData(
   });
  }
 	  
+const getAllData = (req: express.Request, res: express.Response) => {
+	res.send(timetableData);
+}
+
+
 app.get('/api/terms/:termId/courses/:courseId', getCourse);
 app.get('/api/terms/:termId/courses', getCourseList);
-app.get('/api/freerooms', getFreeRoomsData);
+app.get('/api/freerooms', getFreeroomsData);
+app.get('/api/', getAllData);
 
 app.use((_, res, next) => {
 	// update to match the domain you will make the request from
