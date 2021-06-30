@@ -60,10 +60,12 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 // 	}
 //   }
 
-const getFreeRoomsData = (req: express.Request, res: express.Response) => {
+const getFreeroomsData = (req: express.Request, res: express.Response) => {
 	// year is set at 2020 for now
 
   let freeroomsData = {};
+  // NOTE MUST CHANGE DATA TO BE AN ACTUAL OBJECT FOR THIS TO WORK
+  let data = {}
   for (let course of data["T1"]) {
     let courseCode = course["courseCode"];
     let courseName = course["name"];
