@@ -1,5 +1,5 @@
-import * as express from 'express';
-import { timetableData } from './automatic-scraper';
+import * as express from "express";
+import { timetableData } from "./automatic-scraper";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -19,29 +19,29 @@ const port = process.env.PORT || 3001;
 // Sends json data for the given course in the given year and term:
 // (for the data format, see "Example Extracted Data" in README.md)
 const getCourse = (req: express.Request, res: express.Response) => {
-	// Access the timetable data object with:
-	// - timetableData
+  // Access the timetable data object with:
+  // - timetableData
 
-	// Access the url parameters with:
-	// - params.termId (e.g. 2021-T2)
-	// - params.courseId (e.g. COMP1511)
+  // Access the url parameters with:
+  // - params.termId (e.g. 2021-T2)
+  // - params.courseId (e.g. COMP1511)
 
-	res.send("todo");
+  res.send("todo");
 };
 
 // Sends json data for a summary of courses in the given term:
 // ["courseCode":"COMP1511","name":"Programming Fundamentals"},...]
 const getCourseList = (req: express.Request, res: express.Response) => {
-	// Access the timetable data object with:
-	// - timetableData
+  // Access the timetable data object with:
+  // - timetableData
 
-	// Access the url parameters with:
-	// - params.termId (e.g. 2021-T2)
+  // Access the url parameters with:
+  // - params.termId (e.g. 2021-T2)
 
-	res.send("todo");
+  res.send("todo");
 };
 
-// returns 
+// returns
 // {
 // 	  "BuildingID": {
 // 		"RoomID": {
@@ -62,7 +62,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
   let freeroomsData = {};
-  for (let course of data["T1"]) {
+  for (let course of timetableData["T1"]) {
     let courseCode = course["courseCode"];
     let courseName = course["name"];
     for (let classData of course["classes"]) {
@@ -84,7 +84,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
         let day = timeElement["day"];
         let start = timeElement["time"]["start"];
         let end = timeElement["time"]["end"];
-        let weeks = timeElement["weeks"];  
+        let weeks = timeElement["weeks"];
         // case 1: "weeks": "11"
         // case 2: "weeks": "1-11",
         // case 3: "weeks": "3, 5, 7"
@@ -99,11 +99,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
             // turn string into a decimal number after splitting
             let startR = parseInt(startRange);
             let endR = parseInt(endRange);
-            for (
-              let currentWeek = startR;
-              currentWeek <= endR;
-              currentWeek++
-            ) {
+            for (let currentWeek = startR; currentWeek <= endR; currentWeek++) {
               inputData(
                 freeroomsData,
                 buildingId,
@@ -136,11 +132,13 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
         }
       }
     }
-  } 
+
+    res.send(freeroomsData);
+  }
 
   console.log(freeroomsData["K-E12"]["114"]["3"]);
-}
-  
+};
+
 function inputData(
   freeroomsData,
   buildingId,
@@ -174,25 +172,23 @@ function inputData(
     end: end,
   });
 }
-  
 
-
-app.get('/api/terms/:termId/courses/:courseId', getCourse);
-app.get('/api/terms/:termId/courses', getCourseList);
-app.get('/api/freerooms', getFreeroomsData);
+app.get("/api/terms/:termId/courses/:courseId", getCourse);
+app.get("/api/terms/:termId/courses", getCourseList);
+app.get("/api/freerooms", getFreeroomsData);
 //app.get('/api/', getAllData);
 
 app.use((_, res, next) => {
-	// update to match the domain you will make the request from
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header(
-		'Access-Control-Allow-Headers',
-		'Origin, X-Requested-With, Content-Type, Accept'
-	);
-	next();
+  // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 
 app.listen(port, () => {
   console.log(`App is running at http://localhost:${port}.`);
-  console.log('Press ctrl-c to stop.');
+  console.log("Press ctrl-c to stop.");
 });
