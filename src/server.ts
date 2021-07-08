@@ -62,6 +62,11 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
   let freeroomsData = {};
+
+  if (!timetableData["T1"]) {
+    res.send(freeroomsData);
+  }
+
   for (let course of timetableData["T1"]) {
     let courseCode = course["courseCode"];
     let courseName = course["name"];
@@ -132,11 +137,9 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
         }
       }
     }
-
-    res.send(freeroomsData);
   }
 
-  console.log(freeroomsData["K-E12"]["114"]["3"]);
+  res.send(freeroomsData);
 };
 
 function inputData(
