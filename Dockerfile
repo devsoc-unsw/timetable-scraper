@@ -25,5 +25,8 @@ RUN /usr/bin/crontab /crontab.txt
 # Start the cron daemon
 RUN /usr/sbin/crond -f -l 8
 
+# Run the scraper for the first time
+CMD ["npm", "run", "scraper"]
+
 # Run the server
 CMD ["npm", "run", "start"]

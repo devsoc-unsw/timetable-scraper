@@ -1,5 +1,5 @@
 import * as express from "express";
-import { timetableData } from "../automatic-scraper";
+import { timetableData } from "../load-data";
 
 // Running: npx nodemon --exec TIMETABLE_YEAR=2020 npm start
 

@@ -1,5 +1,5 @@
 import * as express from "express";
-import { timetableData } from "../automatic-scraper";
+import { timetableData } from "../load-data";
 
 const errorMessage = "Invalid termId/courseId param";
 
@@ -26,8 +26,6 @@ const getCourse = (req: express.Request, res: express.Response) => {
 
   const term = req.params.termId.substring(5);
   const course = req.params.courseId;
-
-  console.log(timetableData);
 
   const termCourses = timetableData[term]; 
   

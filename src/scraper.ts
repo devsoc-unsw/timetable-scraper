@@ -71,7 +71,7 @@ const timetableScraper = async (
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
   })
   try {
-    const batchsize = 10 // 50 // TODO
+    const batchsize = 50
     // Create batchsize pages to scrape each course
     const pages = await createPages({
       browser: browser,
@@ -117,7 +117,7 @@ const timetableScraper = async (
     let jobs: UrlList = []
 
     // Scrape all the urls from the subject pages (eg: COMPKENS, etc)
-    for (let url = 0; url < 1/*urlList.length*/; ) {
+    for (let url = 0; url < urlList.length; ) {
       // List of promises that are being resolved
       const promises: Promise<string[]>[] = []
       // array of resolved promises from the promises array
@@ -144,7 +144,7 @@ const timetableScraper = async (
 
     // Now scrape each page in the jobs queue and then add it to the scraped
     // array
-    for (let job = 0; job < batchsize; ) { // jobs.length; ) { // TODO
+    for (let job = 0; job < jobs.length; ) {
       const promises: Promise<{
         coursesData: TimetableData
         courseWarnings: CourseWarning[]
