@@ -23,22 +23,54 @@ const getCourse = (req: express.Request, res: express.Response) => {
   // - timetableData
 
   // Access the url parameters with:
-  // - params.termId (e.g. 2021-T2)
-  // - params.courseId (e.g. COMP1511)
+  // - req.params.termId (e.g. 2021-T2)
+  // - req.params.courseId (e.g. COMP1511)
+  
+  console.log(timetableData);
 
-  res.send("todo");
+  const term = req.params.termId.substring(5);
+  const course = req.params.courseId;
+  
+  const termCourses = timetableData[term]; 
+  //console.log(term);
+  for (let i = 0; i < termCourses.length; i++) {
+    
+    if (course == termCourses[i].courseCode) {
+      res.json(termCourses[i]);
+      return;
+    }
+    
+  }
+  res.status(400).send("Invalid termId/courseId param");
 };
 
 // Sends json data for a summary of courses in the given term:
-// ["courseCode":"COMP1511","name":"Programming Fundamentals"},...]
+// [{"courseCode":"COMP1511","name":"Programming Fundamentals"},...]
 const getCourseList = (req: express.Request, res: express.Response) => {
   // Access the timetable data object with:
   // - timetableData
-
+  
   // Access the url parameters with:
-  // - params.termId (e.g. 2021-T2)
+  // - req.params.termId (e.g. 2021-T2)
 
-  res.send("todo");
+  const term = req.params.termId.substring(5);
+  const termCourses = timetableData[term];
+  const resCourses = [];
+  // resCourses.push(...)
+
+  console.log(termCourses);
+
+  for (let i = 0; i < termCourses.length; i++) {
+    const courseSummary = {
+      courseCode: ...,
+      name: ...
+    };
+
+    resCourses.push(termCourses[i]);
+  }
+
+
+  //res.send("todo");
 };
 
 // returns
