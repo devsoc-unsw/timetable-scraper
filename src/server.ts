@@ -7,7 +7,7 @@ const port = process.env.PORT || 3001;
 
 app.get("/api/terms/:termId/courses/:courseId", notangles.getCourse);
 app.get("/api/terms/:termId/courses", notangles.getCourseList);
-app.get("/api/freerooms", freerooms.getFreeroomsData);
+app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
 //app.get('/api/', getAllData);
 
 app.use((_, res, next) => {
