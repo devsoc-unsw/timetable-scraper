@@ -22,7 +22,7 @@ npm install
 While in the project directory, run:
 
 ```
-TIMETABLE_YEAR=<e.g. 2021> npm start
+npm start
 ```
 
 ## Tech Stack:

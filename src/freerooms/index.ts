@@ -1,7 +1,7 @@
 import * as express from "express";
 import { timetableData } from "../load-data";
 
-// Running: npx nodemon --exec TIMETABLE_YEAR=2020 npm start
+// Running: npx nodemon --exec npm start
 
 // returns
 // {

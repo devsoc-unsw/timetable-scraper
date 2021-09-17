@@ -1,3 +1,4 @@
-const dataPath = "./data.json";
+const year = 2021;
+const dataPath = "./data/data.json";
 
-export { dataPath };
+export { year, dataPath };
