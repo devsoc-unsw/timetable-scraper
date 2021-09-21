@@ -21,7 +21,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
       if (classData["mode"] !== "In Person") continue;
 
       // Add term start date for easier date calculations in Freerooms backend
-      if (freeroomsData["termStart"] && classData["termDates"]) {
+      if (!freeroomsData["termStart"] && classData["termDates"]) {
         freeroomsData["termStart"] = classData["termDates"]["start"];
       }
 
