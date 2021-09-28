@@ -1,15 +1,24 @@
 const fs = require("fs");
 import { dataPath, year } from './config';
 
-let timetableData = {};
+interface Data {
+	timetableData: object;
+	courseWarnings: any[];
+	lastUpdated: number;
+}
+
+let data: Data = {
+	timetableData: {},
+	courseWarnings: [],
+	lastUpdated: 0
+};
 
 const loadData = () => {
-	const dataString = fs.readFileSync(dataPath, "utf8");
-	timetableData = JSON.parse(dataString).timetableData;
+	data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
 }
 
 fs.watch(dataPath, loadData);
 
 loadData();
 
-export { timetableData };
+export { data };
