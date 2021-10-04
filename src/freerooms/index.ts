@@ -139,7 +139,7 @@ function inputData(
   }
 
   freeroomsData[buildingId][roomId][currentWeek][day].push({
-    courseCode: courseName,
+    courseCode: `${courseCode} ${courseName}`,
     start: startTime,
     end: endTime,
   });
