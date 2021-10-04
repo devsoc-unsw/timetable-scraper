@@ -1,10 +1,10 @@
 import * as express from "express";
 import { Course } from "../interfaces";
-import { timetableData } from "../load-data";
+import { data } from "../load-data";
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
   const term = req.params.termId.substring(5);
-  const termData: Course[] = timetableData[term];
+  const termData: Course[] = data.timetableData[term];
 
   let freeroomsData = {
     termStart: "",
