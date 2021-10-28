@@ -27,8 +27,8 @@ const getCourse = (req: express.Request, res: express.Response) => {
   const term = req.params.termId.substring(5);
   const course = req.params.courseId;
 
-  const termCourses = data.timetableData[term]; 
-  
+  const termCourses = data.timetableData[term];
+
   if (termCourses) {
     for (let i = 0; i < termCourses.length; i++) {
       if (course == termCourses[i].courseCode) {
@@ -58,8 +58,35 @@ const getCourseList = (req: express.Request, res: express.Response) => {
     for (let i = 0; i < termCourses.length; i++) {
       const courseSummary = {
         courseCode: termCourses[i].courseCode,
-        name: termCourses[i].name
+        name: termCourses[i].name,
+        online: false,
+        inPerson: false
       };
+
+      const classes = termCourses[i].classes;
+
+      if (classes) {
+        let locations = [];
+
+        classes.forEach((classData) => {
+          locations = [
+            ...locations,
+            ...classData.times.map(
+              (time) => time.location
+            ).filter(
+              (location) => location
+            )
+          ];
+        });
+
+        courseSummary.online = locations.some((location) => (
+          location.includes("Online")
+        ));
+
+        courseSummary.inPerson = locations.some((location) => (
+          !location.includes("Online")
+        ));
+      }
 
       resCourses.courses.push(courseSummary);
     }
