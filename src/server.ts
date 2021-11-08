@@ -6,7 +6,7 @@ import * as freerooms from "./freerooms/index";
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors);
+app.use(cors());
 
 app.get("/api/terms/:termId/courses/:courseId", notangles.getCourse);
 app.get("/api/terms/:termId/courses", notangles.getCourseList);
