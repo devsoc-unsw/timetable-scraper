@@ -12,7 +12,6 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
   for (let course of termData) {
     let courseCode = course["courseCode"];
-    let courseName = course["name"];
 
     let courseClasses = course["classes"];
     if (!courseClasses) continue;
@@ -77,7 +76,6 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
                 startTime,
                 endTime,
                 courseCode,
-                courseName
               );
             }
           } else {
@@ -95,7 +93,6 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
               startTime,
               endTime,
               courseCode,
-              courseName
             );
           }
         }
@@ -116,7 +113,6 @@ function inputData(
   startTime: string,
   endTime: string,
   courseCode: string,
-  courseName: string
 ) {
   if (!(buildingId in freeroomsData)) {
     freeroomsData[buildingId] = {};
@@ -139,7 +135,7 @@ function inputData(
   }
 
   freeroomsData[buildingId][roomId][currentWeek][day].push({
-    courseCode: `${courseCode} ${courseName}`,
+    courseCode: courseCode,
     start: startTime,
     end: endTime,
   });
