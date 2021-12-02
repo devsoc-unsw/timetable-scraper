@@ -3,69 +3,87 @@ import { Course } from "../interfaces";
 import { data } from "../load-data";
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
-  const term = req.params.termId.substring(5);
-  const termData: Course[] = data.timetableData[term];
+  try {
+    const term = req.params.termId.substring(5);
+    const termData: Course[] = data.timetableData[term];
 
-  let freeroomsData = {
-    termStart: "",
-  };
+    let freeroomsData = {
+      termStart: "",
+    };
 
-  for (let course of termData) {
-    let courseCode = course["courseCode"];
+    for (let course of termData) {
+      let courseCode = course["courseCode"];
 
-    let courseClasses = course["classes"];
-    if (!courseClasses) continue;
+      let courseClasses = course["classes"];
+      if (!courseClasses) continue;
 
-    for (let classData of courseClasses) {
-      if (classData["mode"] !== "In Person") continue;
+      for (let classData of courseClasses) {
+        if (classData["mode"] !== "In Person") continue;
 
-      // Add term start date for easier date calculations in Freerooms backend
-      if (!freeroomsData["termStart"] && classData["termDates"]) {
-        freeroomsData["termStart"] = classData["termDates"]["start"];
-      }
+        // Add term start date for easier date calculations in Freerooms backend
+        if (!freeroomsData["termStart"] && classData["termDates"]) {
+          freeroomsData["termStart"] = classData["termDates"]["start"];
+        }
 
-      for (let timeElement of classData["times"]) {
-        let classLocation = timeElement["location"];
-        if (!classLocation) continue;
+        for (let timeElement of classData["times"]) {
+          let classLocation = timeElement["location"];
+          if (!classLocation) continue;
 
-        // An example location is UNSW Business School 219 (K-E12-219)
-        let [roomName, locationId] = classLocation.split(" (");
-        let [campus, buildingId, roomId] = locationId.split("-");
-        if (!roomId) continue;
+          // An example location is UNSW Business School 219 (K-E12-219)
+          let [roomName, locationId] = classLocation.split(" (");
+          let [campus, buildingId, roomId] = locationId.split("-");
+          if (!roomId) continue;
 
-        buildingId = campus + "-" + buildingId;
+          buildingId = campus + "-" + buildingId;
 
-        // Remove trailing ) from room id
-        roomId = roomId.slice(0, -1);
+          // Remove trailing ) from room id
+          roomId = roomId.slice(0, -1);
 
-        let day = timeElement["day"];
-        let startTime = timeElement["time"]["start"];
-        let endTime = timeElement["time"]["end"];
-        let weeks = timeElement["weeks"];
+          let day = timeElement["day"];
+          let startTime = timeElement["time"]["start"];
+          let endTime = timeElement["time"]["end"];
+          let weeks = timeElement["weeks"];
 
-        // case 1: "weeks": "11" (single week)
-        // case 2: "weeks": "1-11" (one range of weeks)
-        // case 3: "weeks": "3, 5, 7" (list of individual weeks)
-        // case 4: "weeks": "1-2, 3-5, 7-10" (list of range of weeks)
-        // case 5: "weeks": "1-2, 4, 5-7" (list of both individual and range of weeks)
+          // case 1: "weeks": "11" (single week)
+          // case 2: "weeks": "1-11" (one range of weeks)
+          // case 3: "weeks": "3, 5, 7" (list of individual weeks)
+          // case 4: "weeks": "1-2, 3-5, 7-10" (list of range of weeks)
+          // case 5: "weeks": "1-2, 4, 5-7" (list of both individual and range of weeks)
 
-        let allWeeks = weeks.split(",");
+          let allWeeks = weeks.split(",");
 
-        for (let week in allWeeks) {
-          if (allWeeks[week].includes("-")) {
-            // case 1: week is a range eg. 1-2
-            let [startRange, endRange] = allWeeks[week].split("-");
+          for (let week in allWeeks) {
+            if (allWeeks[week].includes("-")) {
+              // case 1: week is a range eg. 1-2
+              let [startRange, endRange] = allWeeks[week].split("-");
 
-            // turn string into a decimal number after splitting
-            // it will be converted back into a string when used as a key in the object
-            let startWeek = parseInt(startRange);
-            let endWeek = parseInt(endRange);
+              // turn string into a decimal number after splitting
+              // it will be converted back into a string when used as a key in the object
+              let startWeek = parseInt(startRange);
+              let endWeek = parseInt(endRange);
 
-            for (
-              let currentWeek = startWeek;
-              currentWeek <= endWeek;
-              currentWeek++
-            ) {
+              for (
+                let currentWeek = startWeek;
+                currentWeek <= endWeek;
+                currentWeek++
+              ) {
+                inputData(
+                  freeroomsData,
+                  buildingId,
+                  roomId,
+                  roomName,
+                  currentWeek,
+                  day,
+                  startTime,
+                  endTime,
+                  courseCode
+                );
+              }
+            } else {
+              // case 2: week is an integer eg. 5
+              // turn string into a decimal number for consistency with case 1
+              let currentWeek = parseInt(allWeeks[week]);
+
               inputData(
                 freeroomsData,
                 buildingId,
@@ -75,32 +93,18 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
                 day,
                 startTime,
                 endTime,
-                courseCode,
+                courseCode
               );
             }
-          } else {
-            // case 2: week is an integer eg. 5
-            // turn string into a decimal number for consistency with case 1
-            let currentWeek = parseInt(allWeeks[week]);
-
-            inputData(
-              freeroomsData,
-              buildingId,
-              roomId,
-              roomName,
-              currentWeek,
-              day,
-              startTime,
-              endTime,
-              courseCode,
-            );
           }
         }
       }
     }
-  }
 
-  res.send(freeroomsData);
+    res.send(freeroomsData);
+  } catch (_) {
+    res.status(400).send("Error");
+  }
 };
 
 function inputData(
@@ -112,7 +116,7 @@ function inputData(
   day: string,
   startTime: string,
   endTime: string,
-  courseCode: string,
+  courseCode: string
 ) {
   if (!(buildingId in freeroomsData)) {
     freeroomsData[buildingId] = {};

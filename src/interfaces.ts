@@ -76,6 +76,8 @@ enum OtherTerms {
 }
 type ExtendedTerm = Term | OtherTerms
 
+type Activity = string;
+
 /**
  * @interface TimetableData: Maps term to list of all courses that run in that term
  */
@@ -225,6 +227,7 @@ export {
   GetTermFromClassReference,
   GetTermFromClassDates,
   OtherTerms,
+  Activity,
   Time,
   Class,
   Course,

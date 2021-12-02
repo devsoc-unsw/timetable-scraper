@@ -37,7 +37,7 @@ RUN chmod +x /crontab.txt
 RUN crontab /crontab.txt
 
 # Start cron
-RUN cron
+RUN /etc/init.d/cron start
 
 # Run the scraper for the first time
 RUN npm run scraper
