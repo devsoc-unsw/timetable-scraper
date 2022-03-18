@@ -1,5 +1,5 @@
 # Grab the latest Node base image
-FROM node:14.17.6
+FROM node:17.7.1
 
 # Install cron and browser packages
 RUN apt-get update \
