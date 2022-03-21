@@ -41,7 +41,7 @@ const getCourse = (req: express.Request, res: express.Response) => {
     }
 
     res.status(400).send(errorMessage);
-  } catch(_) {
+  } catch (_) {
     res.status(400).send("Error");
   }
 };
@@ -58,15 +58,16 @@ const getCourseList = (req: express.Request, res: express.Response) => {
   try {
     const term = req.params.termId.substring(5);
     const termCourses = data.timetableData[term];
-    const resCourses = {lastUpdated: data.lastUpdated, courses: []};
+    const resCourses = { lastUpdated: data.lastUpdated, courses: [] };
 
     if (termCourses) {
       for (let i = 0; i < termCourses.length; i++) {
         const courseSummary = {
           courseCode: termCourses[i].courseCode,
           name: termCourses[i].name,
+          career: termCourses[i].career,
           online: false,
-          inPerson: false
+          inPerson: false,
         };
 
         const classes = termCourses[i].classes;
@@ -77,21 +78,19 @@ const getCourseList = (req: express.Request, res: express.Response) => {
           classes.forEach((classData) => {
             locations = [
               ...locations,
-              ...classData.times.map(
-                (time) => time.location
-              ).filter(
-                (location) => location
-              )
+              ...classData.times
+                .map((time) => time.location)
+                .filter((location) => location),
             ];
           });
 
-          courseSummary.online = locations.some((location) => (
+          courseSummary.online = locations.some((location) =>
             location.includes("Online")
-          ));
+          );
 
-          courseSummary.inPerson = locations.some((location) => (
-            !location.includes("Online")
-          ));
+          courseSummary.inPerson = locations.some(
+            (location) => !location.includes("Online")
+          );
         }
 
         resCourses.courses.push(courseSummary);
@@ -101,7 +100,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
     } else {
       res.status(400).send(errorMessage);
     }
-  } catch(_) {
+  } catch (_) {
     res.status(400).send("Error");
   }
 };
