@@ -1,5 +1,6 @@
-const fs = require("fs");
-import { dataPath } from "../scraper/config";
+import { dataLocation } from "./server";
+
+import fs from "fs";
 
 interface Data {
     timetableData: object;
@@ -17,7 +18,7 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 
 const loadData = (eventType?: string) => {
     const f = () => {
-        data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+        data = JSON.parse(fs.readFileSync(dataLocation, "utf8"));
         console.log(`Loaded data (written at ${data.lastUpdated}).`);
     };
 
@@ -33,7 +34,7 @@ const loadData = (eventType?: string) => {
     }
 };
 
-fs.watch(dataPath, loadData);
+fs.watch(dataLocation, loadData);
 
 loadData();
 
