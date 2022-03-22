@@ -16,6 +16,6 @@ app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
 app.post("/internal/scrape", writeData);
 
 app.listen(port, () => {
-  console.log(`App is running at http://localhost:${port}.`);
-  console.log("Press ctrl-c to stop.");
+    console.log(`App is running at http://localhost:${port}.`);
+    console.log("Press ctrl-c to stop.");
 });

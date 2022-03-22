@@ -1,10 +1,10 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "types": ["node"],
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "rootDir": "./src",
-    "outDir": "./dist"
-  }
+    "compilerOptions": {
+        "target": "es6",
+        "types": ["node"],
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "rootDir": "./src",
+        "outDir": "./dist"
+    }
 }
