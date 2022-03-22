@@ -1,4 +1,1 @@
-const year = 2022;
-const dataPath = "../data/data.json";
-
-export { year, dataPath };
+export const year = process.env.YEAR ? parseInt(process.env.YEAR) : new Date().getFullYear();
