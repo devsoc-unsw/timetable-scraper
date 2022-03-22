@@ -16,4 +16,6 @@ RUN yarn install --frozen-lockfile
 
 COPY --from=builder /app/dist ./dist
 
-CMD yarn scrape
+EXPOSE 3001
+
+CMD yarn start
