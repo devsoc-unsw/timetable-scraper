@@ -1,18 +1,15 @@
-import {
-  ClassWarnings,
-  WarningTag,
-} from "../../../../scraper-helpers/interfaces";
+import { ClassWarnings, WarningTag } from "../../../../scraper-helpers/interfaces";
 import { makeClassWarning } from "../class-helpers/MakeClassWarning";
 
 interface GetWeeksParams {
-  data: string;
-  classID: number;
-  term: string;
+    data: string;
+    classID: number;
+    term: string;
 }
 
 interface GetWeeksReturn {
-  weeks: string;
-  weeksWarnings: ClassWarnings[];
+    weeks: string;
+    weeksWarnings: ClassWarnings[];
 }
 
 /**
@@ -23,30 +20,30 @@ interface GetWeeksReturn {
  * @returns { GetWeeksReturn }: The weeks in the term that the course runs in, and any warnings that occured during parsing the data passed
  */
 const getWeeks = ({ data, classID, term }: GetWeeksParams): GetWeeksReturn => {
-  const weeks = data;
-  const weeksWarnings: ClassWarnings[] = [];
-  // Weeks is an alphanumeric string consisting of numbers, - and ,
-  // (Strict requirement)
-  let weeksTesterRegex = /^[0-9, <>-]+$/;
-  if (!weeksTesterRegex.test(weeks)) {
-    weeksTesterRegex = /^[0-9A-Z, <>-]+$/;
+    const weeks = data;
+    const weeksWarnings: ClassWarnings[] = [];
+    // Weeks is an alphanumeric string consisting of numbers, - and ,
+    // (Strict requirement)
+    let weeksTesterRegex = /^[0-9, <>-]+$/;
     if (!weeksTesterRegex.test(weeks)) {
-      console.error(new Error("Invalid Weeks data: " + weeks));
-    } else {
-      // Just warn -> Invalid/unknown weeks data.
-      weeksWarnings.push(
-        makeClassWarning({
-          classID: classID,
-          term: term,
-          errorKey: "weeks",
-          errorValue: weeks,
-          tag: WarningTag.UnknownDate_Weeks,
-        })
-      );
+        weeksTesterRegex = /^[0-9A-Z, <>-]+$/;
+        if (!weeksTesterRegex.test(weeks)) {
+            console.error(new Error(`Invalid Weeks data: ${weeks}`));
+        } else {
+            // Just warn -> Invalid/unknown weeks data.
+            weeksWarnings.push(
+                makeClassWarning({
+                    classID,
+                    term,
+                    errorKey: "weeks",
+                    errorValue: weeks,
+                    tag: WarningTag.UnknownDate_Weeks,
+                }),
+            );
+        }
     }
-  }
 
-  return { weeks, weeksWarnings };
+    return { weeks, weeksWarnings };
 };
 
 export { getWeeks };

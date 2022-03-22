@@ -8,18 +8,18 @@
  *    const clean = transformHtmlSpecials('&amp;') // 'and'
  */
 const transformHtmlSpecials = (str: string) => {
-  // &amp --> and
-  let newstr = str.replace("&amp;", "and");
+    // &amp --> and
+    let newstr = str.replace("&amp;", "and");
 
-  // &nbsp ---> nothing (as it appears in course enrolment when the course does not have one)
-  newstr = newstr.replace("&nbsp;", "");
+    // &nbsp ---> nothing (as it appears in course enrolment when the course does not have one)
+    newstr = newstr.replace("&nbsp;", "");
 
-  // &lt --> < (less than), this could be changed to before??
-  newstr = newstr.replace("&lt;", "<");
+    // &lt --> < (less than), this could be changed to before??
+    newstr = newstr.replace("&lt;", "<");
 
-  // There was no greater than sign found, but if neccessary, can be added here
+    // There was no greater than sign found, but if neccessary, can be added here
 
-  return newstr;
+    return newstr;
 };
 
 export { transformHtmlSpecials };

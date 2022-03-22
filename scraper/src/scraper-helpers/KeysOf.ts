@@ -6,7 +6,6 @@
  * @example
  *    const keys = keysOf({'foo', 'bar'}) // ['foo']
  */
-const keysOf = <T extends {}>(obj: T): (keyof T)[] =>
-  Object.keys(obj) as (keyof T)[];
+const keysOf = <T extends {}>(obj: T): (keyof T)[] => Object.keys(obj) as (keyof T)[];
 
 export { keysOf };

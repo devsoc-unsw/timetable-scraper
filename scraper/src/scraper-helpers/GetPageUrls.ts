@@ -1,7 +1,7 @@
 import { getUrls, GetUrlsParams } from "./GetUrls";
 
 interface getPageUrlsParams extends GetUrlsParams {
-  url: string;
+    url: string;
 }
 
 /**
@@ -18,21 +18,17 @@ interface getPageUrlsParams extends GetUrlsParams {
  *    const urls = getPageUrls('http://timetable.unsw.edu.au/2019/COMP1511.html', await browser.newPage(), 'http://timetable.unsw.edu.au/2019/', /html$/)
  * Expect: [ '.*html' ]*
  */
-const getPageUrls = async ({
-  url,
-  page,
-  regex,
-}: getPageUrlsParams): Promise<string[]> => {
-  await page.goto(url, {
-    waitUntil: "networkidle2",
-  });
+const getPageUrls = async ({ url, page, regex }: getPageUrlsParams): Promise<string[]> => {
+    await page.goto(url, {
+        waitUntil: "networkidle2",
+    });
 
-  // Then, get each data url on that page
-  const getDataUrlsParams: GetUrlsParams = {
-    page: page,
-    regex: regex,
-  };
-  return await getUrls(getDataUrlsParams);
+    // Then, get each data url on that page
+    const getDataUrlsParams: GetUrlsParams = {
+        page,
+        regex,
+    };
+    return await getUrls(getDataUrlsParams);
 };
 
 export { getPageUrls };

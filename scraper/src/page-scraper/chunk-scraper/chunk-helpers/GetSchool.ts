@@ -4,12 +4,12 @@
  * @returns { string }: The school that offers the current course
  */
 const getSchool = (school: string): string => {
-  // School is a string
-  if (!school || school === " ") {
-    console.error(new Error("Invalid School: " + school));
-  }
+    // School is a string
+    if (!school || school === " ") {
+        console.error(new Error(`Invalid School: ${school}`));
+    }
 
-  return school;
+    return school;
 };
 
 export { getSchool };

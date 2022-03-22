@@ -1,5 +1,4 @@
-const axios = require("axios");
-
+import axios from "axios";
 import { timetableScraper } from "./scraper";
 import { year } from "./config";
 

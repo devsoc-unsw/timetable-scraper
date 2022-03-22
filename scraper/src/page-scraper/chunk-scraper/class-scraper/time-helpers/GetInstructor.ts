@@ -4,10 +4,10 @@
  * @returns { string }: Name of the instructor that might be listed
  */
 const getInstructor = (data: string): string | false => {
-  if (data && data !== "") {
-    return data;
-  }
-  return false;
+    if (data && data !== "") {
+        return data;
+    }
+    return false;
 };
 
 export { getInstructor };

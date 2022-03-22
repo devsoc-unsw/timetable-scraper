@@ -1,8 +1,8 @@
 import { TimetableUrl } from "../../scraper-helpers/interfaces";
 
 interface FilterUrlsParams {
-  elements: string[];
-  regex: RegExp;
+    elements: string[];
+    regex: RegExp;
 }
 
 /**
@@ -12,9 +12,9 @@ interface FilterUrlsParams {
  * @returns { TimetableUrl[] }: List of urls of urls matching the regex
  */
 const filterUrls = ({ elements, regex }: FilterUrlsParams): TimetableUrl[] => {
-  const urls: TimetableUrl[] = elements.filter(url => regex.test(url));
-  const cleanUrls = new Set<TimetableUrl>(urls);
-  return [...cleanUrls];
+    const urls: TimetableUrl[] = elements.filter((url) => regex.test(url));
+    const cleanUrls = new Set<TimetableUrl>(urls);
+    return [...cleanUrls];
 };
 
 export { filterUrls };

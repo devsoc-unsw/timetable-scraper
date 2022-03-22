@@ -4,9 +4,9 @@
  * @returns { boolean }: true if the line contains the term the course runs in, false otherwise
  */
 const isTerm = (data: string): boolean => {
-  // Term regex -> letter, letter or number, optional letter or number
-  const termFinderRegex = /^[A-Z][A-Z0-9][A-Z0-9]?$/;
-  return termFinderRegex.test(data);
+    // Term regex -> letter, letter or number, optional letter or number
+    const termFinderRegex = /^[A-Z][A-Z0-9][A-Z0-9]?$/;
+    return termFinderRegex.test(data);
 };
 
 export { isTerm };

@@ -6,8 +6,6 @@
  * @example
  *    const formatted = formatDates(['01/27/2020']) // Date('01/27/2020')
  */
-const formatDates = (dates: string[]): Date[] => {
-  return dates.map(date => new Date(date + "Z"));
-};
+const formatDates = (dates: string[]): Date[] => dates.map((date) => new Date(`${date}Z`));
 
 export { formatDates };

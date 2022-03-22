@@ -6,12 +6,12 @@ import { Status } from "../../../../scraper-helpers/interfaces";
  * @returns { Status }: Status of the class (check the Status enum for more details)
  */
 const getStatus = (data: string): Status => {
-  const status = <Status>data;
-  if (!Object.values(Status).includes(status)) {
-    console.error(new Error("Invalid Status: " + status));
-  }
+    const status = <Status>data;
+    if (!Object.values(Status).includes(status)) {
+        console.error(new Error(`Invalid Status: ${status}`));
+    }
 
-  return status;
+    return status;
 };
 
 export { getStatus };

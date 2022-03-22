@@ -1,14 +1,11 @@
-import {
-  WarningTag,
-  ClassWarnings,
-} from "../../../../scraper-helpers/interfaces";
+import { WarningTag, ClassWarnings } from "../../../../scraper-helpers/interfaces";
 
 interface makeClassWarningParams {
-  classID: number;
-  term: string;
-  errorKey: string;
-  errorValue: unknown;
-  tag?: WarningTag;
+    classID: number;
+    term: string;
+    errorKey: string;
+    errorValue: unknown;
+    tag?: WarningTag;
 }
 
 /**
@@ -22,22 +19,22 @@ interface makeClassWarningParams {
  * @returns { ClassWarnings }
  */
 const makeClassWarning = ({
-  classID,
-  term,
-  errorKey,
-  errorValue,
-  tag = WarningTag.Other,
+    classID,
+    term,
+    errorKey,
+    errorValue,
+    tag = WarningTag.Other,
 }: makeClassWarningParams): ClassWarnings => {
-  const warn: ClassWarnings = {
-    tag: tag,
-    classID: classID,
-    term: term,
-    error: {
-      key: errorKey,
-      value: errorValue,
-    },
-  };
-  return warn;
+    const warn: ClassWarnings = {
+        tag,
+        classID,
+        term,
+        error: {
+            key: errorKey,
+            value: errorValue,
+        },
+    };
+    return warn;
 };
 
 export { makeClassWarning };

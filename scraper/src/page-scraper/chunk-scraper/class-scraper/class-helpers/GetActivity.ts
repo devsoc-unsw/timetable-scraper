@@ -4,12 +4,12 @@
  * @returns { string }: Type of activity the class is
  */
 const getActivity = (data: string): string => {
-  const activity = data;
-  if (!activity) {
-    console.error(new Error("Unknown activity: " + activity));
-  }
+    const activity = data;
+    if (!activity) {
+        console.error(new Error(`Unknown activity: ${activity}`));
+    }
 
-  return activity;
+    return activity;
 };
 
 export { getActivity };

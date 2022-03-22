@@ -4,11 +4,11 @@
  * @returns { string }: Mode of delivery for a class
  */
 const getMode = (mode: string): string => {
-  if (!mode || mode === " ") {
-    console.error(new Error("Invalid Mode: " + mode));
-  }
+    if (!mode || mode === " ") {
+        console.error(new Error(`Invalid Mode: ${mode}`));
+    }
 
-  return mode;
+    return mode;
 };
 
 export { getMode };

@@ -3,10 +3,9 @@
  * @param { Element[] } elements: Elements on the page
  * @returns { string[] }: Hrefs of all 'a' tags in the elements list
  */
-const extractHrefsFromPage = (elements: Element[]): string[] => {
-  return elements
-    .filter((ele): ele is HTMLAnchorElement => "href" in ele)
-    .map(element => element.href);
-};
+const extractHrefsFromPage = (elements: Element[]): string[] =>
+    elements
+        .filter((ele): ele is HTMLAnchorElement => "href" in ele)
+        .map((element) => element.href);
 
 export { extractHrefsFromPage };

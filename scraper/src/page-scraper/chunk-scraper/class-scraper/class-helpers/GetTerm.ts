@@ -4,13 +4,13 @@
  * @returns { string }: The term that the class runs in
  */
 const getTerm = (data: string): string => {
-  let term: string;
-  const termFinderRegex = /^([A-Z][A-Z0-9][A-Z0-9]?).*/;
-  if (termFinderRegex.test(data)) {
-    term = termFinderRegex.exec(data)[1];
-  }
+    let term: string;
+    const termFinderRegex = /^([A-Z][A-Z0-9][A-Z0-9]?).*/;
+    if (termFinderRegex.test(data)) {
+        term = termFinderRegex.exec(data)[1];
+    }
 
-  return term;
+    return term;
 };
 
 export { getTerm };
