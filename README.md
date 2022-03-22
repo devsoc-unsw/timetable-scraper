@@ -7,9 +7,9 @@ This module scrapes UNSW courses and their class information in a specified stud
 This project has been verified to work with the following versions:
 
 - node:
-  - 12.14.0
-- npm:
-  - 6.13.4
+  - 16.14
+- yarn (`npm install -g yarn`):
+  - 1.22.18
 
 While in the project directory, run:
 
@@ -40,6 +40,7 @@ This web-scraper uses:
 UNSW stores timetable-related information about all courses offered on [timetable.unsw.edu.au](https://timetable.unsw.edu.au/).
 
 - The site has at most one page per course offered per year.
+
   - Each page is further divided into subsections detailing all classes per term.
   - There is also a subsection that provides a list of timings and location for each of the classes.
 
@@ -52,6 +53,7 @@ The scraper has two parts:
 1. Scrape data from a page.
 
    - Based on the strucure of the page, the scraper parses each subsection and converts the data on the page to an array of JSON objects.
+
 2. Visit each page of the website so that every course can be scraped.
 
    - Puppeteer - the chromium headless browser, is used to automate this process. First it visits each page on a subject area, then obtains link urls to each of the course pages and then visits each course page.
@@ -61,23 +63,25 @@ The scraper has two parts:
      `Summer, T1, T2, T3, S1 and S2` based on the dates that the course classes run.
 
    - The scraper also checks the data for any errors. If it finds data that is not in the expected format, it makes a copy of the data that it thinks is erroneous and adds it to a list of warnings. This list of warnings is then returned to the caller. Each warning is tagged with a warning tag and a simple warning message. For example:
+
    ```json
    {
-        "courseCode": "ATSI0002",
-        "courseName": "Enabling Skills 2",
-        "tag": "Unknown Location",
-        "classID": 10723,
-        "term": "T2",
-        "error": {
-            "key": "location",
-            "value": "( )"
-        }
-    }
-
+     "courseCode": "ATSI0002",
+     "courseName": "Enabling Skills 2",
+     "tag": "Unknown Location",
+     "classID": 10723,
+     "term": "T2",
+     "error": {
+       "key": "location",
+       "value": "( )"
+     }
+   }
+   ```
 
 ### Example Extracted Data
 
 From COMP1511 offered in term 1 2019
+
 ```json
 {
     "courseCode": "COMP1511",
