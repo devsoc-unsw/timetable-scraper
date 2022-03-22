@@ -4,8 +4,6 @@ import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
 
-export const dataLocation = "/data/data.json";
-
 const app = express();
 const port = process.env.PORT || 3001;
 

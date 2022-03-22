@@ -1,6 +1,5 @@
-import { dataLocation } from "./server";
-
 import fs from "fs";
+export const dataLocation = "/data/data.json";
 
 interface Data {
     timetableData: object;
