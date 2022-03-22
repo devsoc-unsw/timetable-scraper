@@ -3,6 +3,8 @@
     "target": "es6",
     "types": ["node"],
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "outDir": "./dist"
   }
 }
