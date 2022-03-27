@@ -6,6 +6,9 @@ const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
 (async () => {
     const data = await timetableScraper(year);
+
+    if (!data) return;
+
     const res = await axios.post(url, data);
 
     if (res.status === 400) {
