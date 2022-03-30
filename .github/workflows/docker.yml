@@ -43,3 +43,31 @@ jobs:
             ghcr.io/csesoc/timetable-${{ matrix.component }}:${{ github.sha }}
             ghcr.io/csesoc/timetable-${{ matrix.component }}:latest
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    name: Deploy (CD)
+    runs-on: ubuntu-latest
+    needs: [build]
+    concurrency: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: csesoc/deployment
+          token: ${{ secrets.GH_TOKEN }}
+      - name: Install yq
+        uses: mikefarah/yq@v4.24.2
+      - name: Update deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config user.name "CSESoc CD"
+          git config user.email "technical@csesoc.org.au"
+          git checkout -b update/tt-scraper/${{ github.sha }}
+          yq -i '.items[0].spec.template.spec.containers[0].image = "ghcr.io/csesoc/timetable-api:${{ github.sha }}"' apps/projects/timetable-scraper/deploy.yml
+          yq -i '.spec.jobTemplate.spec.template.spec.containers[0].image = "ghcr.io/csesoc/timetable-scraper:${{ github.sha }}"' apps/projects/timetable-scraper/cronjob.yml
+          git add . 
+          git commit -m "feat(tt-scraper): update images" 
+          git push -u origin update/tt-scraper/${{ github.sha }}
+          gh pr create --title "feat(tt-scraper): update image" --body "Updates the images for the timetable-scraper deployment to commit csesoc/timetable-scraper@${{ github.sha }}." > URL
+          gh pr merge $(cat URL) --squash -d
