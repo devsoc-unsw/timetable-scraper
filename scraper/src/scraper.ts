@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer";
 import { cloneDeep } from "lodash";
-
 import {
     TimetableData,
     UrlList,
@@ -14,6 +13,8 @@ import { getPageUrls } from "./scraper-helpers/GetPageUrls";
 import { scrapePage } from "./page-scraper/PageScraper";
 import { keysOf } from "./scraper-helpers/KeysOf";
 import { createPages } from "./scraper-helpers/CreatePages";
+
+
 
 interface ScrapeSubjectParams {
     page: puppeteer.Page;
