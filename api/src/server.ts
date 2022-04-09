@@ -8,6 +8,7 @@ import * as Tracing from "@sentry/tracing";
 
 const app = express();
 
+// Sentry configurations
 Sentry.init({
     dsn: "https://d053cb7b3637458e974012782ee5f662@o1179870.ingest.sentry.io/6311064",
     integrations: [
@@ -15,12 +16,10 @@ Sentry.init({
         new Tracing.Integrations.Express({ app }),
     ],
     // might need to change this for production
-    tracesSampleRate: 0.5,
+    tracesSampleRate: 0.6,
 });
-
-app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
 app.use(Sentry.Handlers.tracingHandler());
-
 
 const port = process.env.PORT || 3001;
 
@@ -33,7 +32,7 @@ app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
 app.post("/internal/scrape", writeData);
 
 
-app.use(Sentry.Handlers.errorHandler());
+app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use(function onError(err, req, res, next) {
     res.statusCode = 500;
     res.end(res.sentry + "\n");

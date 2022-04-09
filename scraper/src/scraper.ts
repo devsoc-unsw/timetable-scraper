@@ -14,8 +14,6 @@ import { scrapePage } from "./page-scraper/PageScraper";
 import { keysOf } from "./scraper-helpers/KeysOf";
 import { createPages } from "./scraper-helpers/CreatePages";
 
-
-
 interface ScrapeSubjectParams {
     page: puppeteer.Page;
     course: string;

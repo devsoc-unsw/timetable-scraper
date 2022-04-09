@@ -4,7 +4,6 @@ import { year } from "./config";
 
 const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
-
 (async () => {
     const data = await timetableScraper(year);
 
