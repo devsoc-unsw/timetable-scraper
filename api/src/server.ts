@@ -15,8 +15,7 @@ Sentry.init({
         new Sentry.Integrations.Http({ tracing: true }),
         new Tracing.Integrations.Express({ app }),
     ],
-    // might need to change this for production
-    tracesSampleRate: 0.6,
+    tracesSampleRate: Number(process.env.TRACE_RATE),
 });
 app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
 app.use(Sentry.Handlers.tracingHandler());
@@ -33,7 +32,7 @@ app.post("/internal/scrape", writeData);
 
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
-app.use(function onError(err, req, res, next) {
+app.use((err, req, res, next) => {
     res.statusCode = 500;
     res.end(res.sentry + "\n");
 });
