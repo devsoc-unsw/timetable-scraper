@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "master"
+      - "renovate/*"
   pull_request: {}
 
 jobs:
@@ -36,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ${{ matrix.component }}
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
           platforms: linux/amd64
           file: ${{ matrix.component }}/Dockerfile
           tags: |
@@ -48,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build]
     concurrency: production
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
 
     steps:
       - name: Checkout repository
