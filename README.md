@@ -4,26 +4,23 @@ This module scrapes UNSW courses and their class information in a specified stud
 
 ## Installation
 
-This project has been verified to work with the following versions:
+In two separate terminals, `cd` into `/api` and `/scraper` and run `npm i` in both folders. This will install the required packages for the server and scraper respectively.
 
-- node:
-  - 16.14
-- yarn (`npm install -g yarn`):
-  - 1.22.18
+## Running the scraper
 
-While in the project directory, run:
+To run the scraper locally, first start the API, then run the scraper script.
 
-```
-npm install
-```
+The following steps may seem slightly weird because the code was designed with deployment in mind, hence some adjustments are required to be made to run it locally.
 
-## Running the Script
+### API
 
-While in the project directory, run:
+First change line 2 of `/api/src/load-data.ts` to `../data/data.json`. Make sure you change this back before pushing!
 
-```
-npm start
-```
+Next, in the terminal for `/api`, run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `npm start` to start the server.
+
+### Scraper
+
+To run ths scraper, in the terminal for `/scraper` run `npm run scrape`. Ensure that the server is running before the scraper is run.
 
 ## Tech Stack:
 
@@ -48,7 +45,7 @@ UNSW stores timetable-related information about all courses offered on [timetabl
 
 ### The Scraper
 
-The scraper has two parts:
+The scraper has three parts:
 
 1. Scrape data from a page.
 
@@ -59,8 +56,7 @@ The scraper has two parts:
    - Puppeteer - the chromium headless browser, is used to automate this process. First it visits each page on a subject area, then obtains link urls to each of the course pages and then visits each course page.
      It opens each page on the website in a separate tab. To improve speed, it opens 50 tabs at once.
 
-   - Once it finishes scraping the site, it then groups the courses into 6 terms:
-     `Summer, T1, T2, T3, S1 and S2` based on the dates that the course classes run.
+   - Once it finishes scraping the site, it then groups the courses into 6 terms: `Summer, T1, T2, T3, S1 and S2` based on the dates that the course classes run.
 
    - The scraper also checks the data for any errors. If it finds data that is not in the expected format, it makes a copy of the data that it thinks is erroneous and adds it to a list of warnings. This list of warnings is then returned to the caller. Each warning is tagged with a warning tag and a simple warning message. For example:
 
@@ -77,6 +73,7 @@ The scraper has two parts:
      }
    }
    ```
+3. Make a POST request to the server with the updated data, which is then written to a JSON file.
 
 ### Example Extracted Data
 
