@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import { cloneDeep } from "lodash";
+
 import {
     TimetableData,
     UrlList,

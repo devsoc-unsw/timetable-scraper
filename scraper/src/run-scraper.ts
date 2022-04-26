@@ -15,4 +15,3 @@ const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
         console.error("Error");
     }
 })();
-

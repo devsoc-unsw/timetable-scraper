@@ -10,8 +10,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@sentry/node": "^6.19.4",
-        "@sentry/tracing": "^6.19.4",
+        "@sentry/node": "6.19.4",
+        "@sentry/tracing": "6.19.4",
         "cors": "2.8.5",
         "express": "4.17.3"
     },
