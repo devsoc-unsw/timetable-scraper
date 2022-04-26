@@ -11,7 +11,10 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "axios": "0.27.0",
+        "@sentry/browser": "6.19.4",
+        "@sentry/node": "6.19.3",
+        "@sentry/tracing": "6.19.4",
+        "axios": "0.26.1",
         "lodash": "4.17.21",
         "puppeteer": "13.6.0"
     },
