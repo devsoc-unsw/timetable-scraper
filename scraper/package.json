@@ -14,7 +14,7 @@
         "@sentry/browser": "6.19.6",
         "@sentry/node": "6.19.6",
         "@sentry/tracing": "6.19.6",
-        "axios": "0.26.1",
+        "axios": "0.27.1",
         "lodash": "4.17.21",
         "puppeteer": "13.6.0"
     },
