@@ -6,13 +6,14 @@ import * as Tracing from "@sentry/tracing";
 import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
+import { getStartDate } from "./getStartDate";
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Sentry configurations
 Sentry.init({
-    dsn: `${process.env.SENTRY_INGEST_URL}`,
+    dsn: "https://d053cb7b3637458e974012782ee5f662@o1179870.ingest.sentry.io/6311064",
     integrations: [
         new Sentry.Integrations.Http({ tracing: true }),
         new Tracing.Integrations.Express({ app }),
@@ -28,6 +29,8 @@ app.use(express.json({ limit: "10mb" }));
 app.get("/api/terms/:termId/courses/:courseId", notangles.getCourse);
 app.get("/api/terms/:termId/courses", notangles.getCourseList);
 app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
+app.get("/api/getstartdate", getStartDate);
+
 app.post("/internal/scrape", writeData);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
