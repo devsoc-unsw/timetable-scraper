@@ -13,7 +13,7 @@ const port = process.env.PORT || 3001;
 
 // Sentry configurations
 Sentry.init({
-    dsn: "https://d053cb7b3637458e974012782ee5f662@o1179870.ingest.sentry.io/6311064",
+    dsn: `${process.env.INGEST_URL}`,
     integrations: [
         new Sentry.Integrations.Http({ tracing: true }),
         new Tracing.Integrations.Express({ app }),

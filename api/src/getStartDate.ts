@@ -35,8 +35,3 @@ const getStartDate = (req: express.Request, res: express.Response) => {
 
 
 export { getStartDate };
-
-// TODO:
-// Change dsn back to env path
-// Change load data back to original path
-// 
