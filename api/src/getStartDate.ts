@@ -1,7 +1,5 @@
 import * as express from "express";
 import { data } from "./load-data";
-
-const errorMessage = "Invalid termId/courseId param";
 const FIRST_COURSE: Number = 0;
 
 /**
@@ -37,3 +35,8 @@ const getStartDate = (req: express.Request, res: express.Response) => {
 
 
 export { getStartDate };
+
+// TODO:
+// Change dsn back to env path
+// Change load data back to original path
+// 
