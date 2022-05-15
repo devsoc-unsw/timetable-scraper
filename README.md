@@ -16,7 +16,7 @@ The following steps may seem slightly weird because the code was designed with d
 
 First change line 2 of `/api/src/load-data.ts` to `../data/data.json`. Make sure you change this back before pushing!
 
-Next, in the terminal for `/api`, run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `npm start` to start the server.
+Next, in the terminal for `/api`, run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `SENTRY_INGEST_URL='' npm start` to start the server.
 
 ### Scraper
 
