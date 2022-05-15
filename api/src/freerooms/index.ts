@@ -6,9 +6,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
         const term = req.params.termId.substring(5);
         const termData = data.timetableData[term];
 
-        let freeroomsData = {
-            termStart: "",
-        };
+        let freeroomsData = {};
 
         for (let course of termData) {
             let courseCode = course["courseCode"];
@@ -18,11 +16,6 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
             for (let classData of courseClasses) {
                 if (classData["mode"] !== "In Person") continue;
-
-                // Add term start date for easier date calculations in Freerooms backend
-                if (!freeroomsData["termStart"] && classData["termDates"]) {
-                    freeroomsData["termStart"] = classData["termDates"]["start"];
-                }
 
                 for (let timeElement of classData["times"]) {
                     let classLocation = timeElement["location"];
