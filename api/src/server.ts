@@ -6,14 +6,14 @@ import * as Tracing from "@sentry/tracing";
 import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
-import { getStartDate } from "./getStartDate";
+import { getAvailableTermData, getStartDateFreerooms, getStartDateNotangles } from "./getStartDate";
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Sentry configurations
 Sentry.init({
-    dsn: `${process.env.INGEST_URL}`,
+    dsn: `${process.env.SENTRY_INGEST_URL}`,
     integrations: [
         new Sentry.Integrations.Http({ tracing: true }),
         new Tracing.Integrations.Express({ app }),
@@ -29,7 +29,11 @@ app.use(express.json({ limit: "10mb" }));
 app.get("/api/terms/:termId/courses/:courseId", notangles.getCourse);
 app.get("/api/terms/:termId/courses", notangles.getCourseList);
 app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
-app.get("/api/getstartdate", getStartDate);
+app.get("/api/startdate/freerooms", getStartDateFreerooms);
+
+app.get("/api/startdate/notangles", getStartDateNotangles);
+app.get("/api/availableterm/notangles", getAvailableTermData);
+
 
 app.post("/internal/scrape", writeData);
 
