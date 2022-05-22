@@ -34,7 +34,6 @@ app.get("/api/startdate/freerooms", getStartDateFreerooms);
 app.get("/api/startdate/notangles", getStartDateNotangles);
 app.get("/api/availableterm/notangles", getAvailableTermData);
 
-
 app.post("/internal/scrape", writeData);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
