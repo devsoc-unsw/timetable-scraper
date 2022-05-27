@@ -1,7 +1,6 @@
 import * as express from "express";
 import { data } from "./load-data";
 const FIRST_COURSE = 0;
-const DATA_NOT_FOUND = "ERROR";
 const termArray: string[] = ["Summer", "T1", "T2", "T3"];
 
 /**
@@ -36,12 +35,7 @@ const getStartDateFreerooms = (req: express.Request, res: express.Response) => {
         // The assumption is that the starting date is the start date of the first class
         // of the term.
         const mostRecentTerm = getLatestTermName();
-        const termStartDate =
-            data.timetableData[mostRecentTerm][FIRST_COURSE]["classes"][0]["termDates"]["start"];
-        if (termStartDate === DATA_NOT_FOUND) {
-            res.status(400).send("Error");
-        }
-
+        const termStartDate = getTermStartDate(mostRecentTerm);
         const currDate = new Date();
         const regexp = /(\d{2})\/(\d{2})\/(\d{4})/;
         let day, month, year;
@@ -79,9 +73,7 @@ const getStartDateNotangles = (req: express.Request, res: express.Response) => {
         // The assumption is that the starting date is the start date of the first class
         // of the term.
         const termStartDate = getTermStartDate(getLatestTermName());
-        if (termStartDate === DATA_NOT_FOUND) {
-            res.status(400).send("Error");
-        }
+
         res.send(termStartDate);
     } catch (e) {
         res.status(400).send("Error");
@@ -113,7 +105,7 @@ const getLatestTermName = () => {
             // Check if the termId exists in the timetableData and the fields are actually
             // present. If they are, return the term as it is.
             if (timetableData.hasOwnProperty(termId)) {
-                if (!isClassFound(termId, "ECO")) {
+                if (!isClassFound(termId, "ECON1101")) {
                     break;
                 }
                 term = termId;
@@ -123,7 +115,6 @@ const getLatestTermName = () => {
         return term;
     } catch (e) {
         console.error("There was an error getting the most updated term!");
-        return DATA_NOT_FOUND;
     }
 };
 
@@ -142,7 +133,6 @@ const getTermStartDate = (termId: string) => {
         return termStartDate;
     } catch (e) {
         console.error("There was an error getting the term start date!");
-        return DATA_NOT_FOUND;
     }
 };
 
