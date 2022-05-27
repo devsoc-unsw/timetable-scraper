@@ -1,8 +1,8 @@
 import * as express from "express";
-import { data } from "./load-data";
-const FIRST_COURSE = 0;
-const termArray: string[] = ["Summer", "T1", "T2", "T3"];
-
+import { data } from "../load-data";
+export const FIRST_COURSE = 0;
+export const termArray: string[] = ["Summer", "T1", "T2", "T3"];
+const COURSE_OFFERED_EVERY_TERM = "ECON1101";
 /**
  * Some notes on the start date for the automation:
  * To start off, there are some assumptions which need to be documented:
@@ -24,61 +24,6 @@ const termArray: string[] = ["Summer", "T1", "T2", "T3"];
  *    equal to the current date.
  *
  */
-
-/**
- * Get the appropriate term date for Freerooms. It will get the current
- * term date and not the new term date.
- */
-const getStartDateFreerooms = (req: express.Request, res: express.Response) => {
-    try {
-        // Get the latest term and check the first class of the term
-        // The assumption is that the starting date is the start date of the first class
-        // of the term.
-        const mostRecentTerm = getLatestTermName();
-        const termStartDate = getTermStartDate(mostRecentTerm);
-        const currDate = new Date();
-        const regexp = /(\d{2})\/(\d{2})\/(\d{4})/;
-        let day, month, year;
-        const matched = termStartDate.match(regexp);
-        if (matched != null) {
-            [, day, month, year] = matched;
-        } else {
-            res.status(400).send("Error getting the start date");
-        }
-        const termStartDateObj = new Date(year, month, day);
-        // Getting the difference in time so Freerooms gets the most recent term start date when
-        // it starts.
-        const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0 ? true : false;
-        // If the data is more than a day old, we will return the term start date that is for the
-        // new term, else we get the date for the old term.
-        if (isCurrentTerm) {
-            res.send(termStartDate);
-        } else {
-            // Checking if the term is the first term, we can have case when index out of bounds
-            // as next year's summer rolls over.
-            let dummyTerm = Math.max(termArray.findIndex((term) => term === mostRecentTerm) - 1, 0);
-            res.send(getTermStartDate(termArray[dummyTerm]));
-        }
-    } catch (e) {
-        res.status(400).send("Error");
-    }
-};
-
-/**
- * Get the latest term start date from data.json
- */
-const getStartDateNotangles = (req: express.Request, res: express.Response) => {
-    try {
-        // Get the latest term and check the first class of the term
-        // The assumption is that the starting date is the start date of the first class
-        // of the term.
-        const termStartDate = getTermStartDate(getLatestTermName());
-
-        res.send(termStartDate);
-    } catch (e) {
-        res.status(400).send("Error");
-    }
-};
 
 /**
  * Get the latest term start date from data.json
@@ -105,7 +50,7 @@ const getLatestTermName = () => {
             // Check if the termId exists in the timetableData and the fields are actually
             // present. If they are, return the term as it is.
             if (timetableData.hasOwnProperty(termId)) {
-                if (!isClassFound(termId, "ECON1101")) {
+                if (!isClassFound(termId, COURSE_OFFERED_EVERY_TERM)) {
                     break;
                 }
                 term = termId;
@@ -136,4 +81,4 @@ const getTermStartDate = (termId: string) => {
     }
 };
 
-export { getStartDateNotangles, getStartDateFreerooms, getAvailableTermData };
+export { getAvailableTermData, getTermStartDate, isClassFound, getLatestTermName };

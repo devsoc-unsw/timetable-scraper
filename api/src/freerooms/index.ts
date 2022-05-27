@@ -1,5 +1,6 @@
 import * as express from "express";
 import { data } from "../load-data";
+import { getStartDate } from "./getStartDate";
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
     try {
@@ -137,4 +138,4 @@ function inputData(
     });
 }
 
-export { getFreeroomsData };
+export { getFreeroomsData, getStartDate };
