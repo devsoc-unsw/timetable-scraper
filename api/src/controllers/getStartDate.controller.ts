@@ -13,9 +13,9 @@ const getStartDateByRouteParams = (req: express.Request, res: express.Response) 
     try {
         const client = req.params.client;
         if (client === "notangles") {
-            res.send(notangles.getStartDate(req, res));
+            return res.send(notangles.getStartDate(req, res));
         } else if (client === "freerooms") {
-            res.send(freerooms.getStartDate(req, res));
+            return res.send(freerooms.getStartDate(req, res));
         }
     } catch (e) {
         res.status(400).send("Error");

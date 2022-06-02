@@ -3,6 +3,7 @@ import { data } from "../load-data";
 export const FIRST_COURSE = 0;
 export const termArray: string[] = ["Summer", "T1", "T2", "T3"];
 const COURSE_OFFERED_EVERY_TERM = "ECON1101";
+
 /**
  * Some notes on the start date for the automation:
  * To start off, there are some assumptions which need to be documented:
@@ -30,7 +31,8 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  */
 const getAvailableTermData = (req: express.Request, res: express.Response) => {
     try {
-        res.send(getLatestTermName());
+        console.log("TEst");
+        return res.send(getLatestTermName());
     } catch (e) {
         res.status(400).send("Error");
     }
@@ -45,6 +47,7 @@ const getAvailableTermData = (req: express.Request, res: express.Response) => {
 const getLatestTermName = () => {
     try {
         let term: string = "";
+        console.log("DEBUG DEBUG DEBUG");
         for (let termId of termArray) {
             const timetableData = data.timetableData;
             // Check if the termId exists in the timetableData and the fields are actually
@@ -65,7 +68,9 @@ const getLatestTermName = () => {
 
 const isClassFound = (termId: string, courseCode: string) => {
     const timetableData = data.timetableData;
-    return timetableData[termId].some((course) => course.courseCode === courseCode);
+    return timetableData[termId].some(
+        (course: { courseCode: string }) => course.courseCode === courseCode,
+    );
 };
 
 const getTermStartDate = (termId: string) => {

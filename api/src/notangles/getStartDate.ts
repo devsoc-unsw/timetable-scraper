@@ -6,12 +6,15 @@ import { getLatestTermName, getTermStartDate } from "../helper/getTermDataInfo";
  */
 const getStartDate = (req: express.Request, res: express.Response) => {
     try {
+        console.log("ntgl - 1");
         // Get the latest term and check the first class of the term
         // The assumption is that the starting date is the start date of the first class
         // of the term.
-        const termStartDate = getTermStartDate(getLatestTermName());
+        const mostRecentTerm = getLatestTermName();
+        console.log("WATASFASD");
+        const termStartDate = getTermStartDate(mostRecentTerm);
 
-        res.send(termStartDate);
+        return res.send(termStartDate);
     } catch (e) {
         res.status(400).send("Error");
     }
