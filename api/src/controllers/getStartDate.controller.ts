@@ -12,10 +12,17 @@ import * as freerooms from "../freerooms/index";
 const getStartDateByRouteParams = (req: express.Request, res: express.Response) => {
     try {
         const client = req.params.client;
+        let response: string | undefined;
         if (client === "notangles") {
-            return res.send(notangles.getStartDate(req, res));
+            response = notangles.getStartDate();
         } else if (client === "freerooms") {
-            return res.send(freerooms.getStartDate(req, res));
+            response = freerooms.getStartDate();
+        }
+
+        if (response === undefined) {
+            res.status(400).send("Error");
+        } else {
+            res.send(response);
         }
     } catch (e) {
         res.status(400).send("Error");

@@ -31,7 +31,6 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  */
 const getAvailableTermData = (req: express.Request, res: express.Response) => {
     try {
-        console.log("TEst");
         return res.send(getLatestTermName());
     } catch (e) {
         res.status(400).send("Error");
@@ -47,7 +46,6 @@ const getAvailableTermData = (req: express.Request, res: express.Response) => {
 const getLatestTermName = () => {
     try {
         let term: string = "";
-        console.log("DEBUG DEBUG DEBUG");
         for (let termId of termArray) {
             const timetableData = data.timetableData;
             // Check if the termId exists in the timetableData and the fields are actually
@@ -63,6 +61,7 @@ const getLatestTermName = () => {
         return term;
     } catch (e) {
         console.error("There was an error getting the most updated term!");
+        return undefined;
     }
 };
 
@@ -83,6 +82,7 @@ const getTermStartDate = (termId: string) => {
         return termStartDate;
     } catch (e) {
         console.error("There was an error getting the term start date!");
+        return undefined;
     }
 };
 
