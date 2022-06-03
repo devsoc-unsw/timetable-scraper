@@ -6,7 +6,8 @@ import * as Tracing from "@sentry/tracing";
 import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
-
+import { getAvailableTermData } from "./helper/getTermDataInfo";
+import { getStartDateByRouteParams } from "./controllers/getStartDate.controller";
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -28,6 +29,10 @@ app.use(express.json({ limit: "10mb" }));
 app.get("/api/terms/:termId/courses/:courseId", notangles.getCourse);
 app.get("/api/terms/:termId/courses", notangles.getCourseList);
 app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
+
+app.get("/api/availableterm/", getAvailableTermData);
+app.get("/api/startdate/:client", getStartDateByRouteParams);
+
 app.post("/internal/scrape", writeData);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);

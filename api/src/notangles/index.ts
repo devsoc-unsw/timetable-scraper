@@ -1,5 +1,6 @@
 import * as express from "express";
 import { data } from "../load-data";
+import { getStartDate } from "./getStartDate";
 
 const errorMessage = "Invalid termId/courseId param";
 
@@ -104,4 +105,4 @@ const getCourseList = (req: express.Request, res: express.Response) => {
     }
 };
 
-export { getCourse, getCourseList };
+export { getCourse, getCourseList, getStartDate };
