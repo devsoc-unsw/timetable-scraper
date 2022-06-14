@@ -1,5 +1,5 @@
 import fs from "fs";
-export const dataLocation = "../data/data.json";
+export const dataLocation = "/data/data.json";
 
 interface Data {
     timetableData: object;
