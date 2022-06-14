@@ -1,10 +1,10 @@
 # Timetable Scraper
 
-This module scrapes UNSW courses and their class information in a specified study period, from [timetable.unsw.edu.au](https://timetable.unsw.edu.au/). It stores this in a JSON file and memory. There are a number of public endpoints for use by Notangles, Freerooms, and other projects.
+This module scrapes UNSW courses and their class information in a specified study period, from [timetable.unsw.edu.au](https://timetable.unsw.edu.au/). The server stores this in a JSON file in memory. There are a number of public endpoints for use by Notangles, Freerooms, and other projects.
 
 ## Installation
 
-In two separate terminals, `cd` into `/api` and `/scraper` and run `npm i` in both folders. This will install the required packages for the server and scraper respectively.
+In two separate terminals, `cd` into `/api` and `/scraper` and run `yarn` in both folders. This will install the required packages for the server and scraper respectively.
 
 ## Running the scraper
 
@@ -20,7 +20,7 @@ Next, in the terminal for `/api`, run `npm run build` to transpile the Typescrip
 
 ### Scraper
 
-To run ths scraper, in the terminal for `/scraper` run `npm run scrape`. Ensure that the server is running before the scraper is run.
+First, in the terminal for `/scraper` run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `npm run scrape` to start the scraper. Ensure that the server is running before the scraper is run.
 
 ## Tech Stack:
 
