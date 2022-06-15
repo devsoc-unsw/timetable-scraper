@@ -28,4 +28,5 @@ const getStartDateByRouteParams = (req: express.Request, res: express.Response) 
         res.status(400).send("Error, could not get the start date");
     }
 };
+
 export { getStartDateByRouteParams };
