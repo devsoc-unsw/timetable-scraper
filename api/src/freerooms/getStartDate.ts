@@ -1,4 +1,3 @@
-import * as express from "express";
 import { getLatestTermName, getTermStartDate, termArray } from "../helper/getTermDataInfo";
 
 /**
@@ -21,7 +20,8 @@ const getStartDate = () => {
         } else {
             return undefined;
         }
-        const termStartDateObj = new Date(year, month, day);
+        const termStartDateObj = new Date(year, month - 1, day);
+
         // Getting the difference in time so Freerooms gets the most recent term start date when
         // it starts.
         const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0 ? true : false;
@@ -29,7 +29,6 @@ const getStartDate = () => {
         // new term, else we get the date for the old term.
         if (isCurrentTerm) {
             return termStartDate;
-            //res.send(termStartDate);
         } else {
             // Checking if the term is the first term, we can have case when index out of bounds
             // as next year's summer rolls over.
