@@ -1,8 +1,8 @@
 import { Browser, Page } from "puppeteer";
 
 interface createPagesParams {
-    browser: Browser;
-    batchsize: number;
+  browser: Browser;
+  batchsize: number;
 }
 
 /**
@@ -13,23 +13,23 @@ interface createPagesParams {
  * @returns {Promise<Page[]>}
  */
 const createPages = async ({ browser, batchsize }: createPagesParams): Promise<Page[]> => {
-    // List of pages
-    const pages: Page[] = [];
-    for (let pageno = 0; pageno < batchsize; pageno++) {
-        const singlepage = await browser.newPage();
-        // Block all js, css, fonts and images for speed
-        await singlepage.setRequestInterception(true);
-        singlepage.on("request", (request) => {
-            const type = request.resourceType();
-            if (type === "document") {
-                request.continue();
-            } else {
-                request.abort();
-            }
-        });
-        pages.push(singlepage);
-    }
-    return pages;
+  // List of pages
+  const pages: Page[] = [];
+  for (let pageno = 0; pageno < batchsize; pageno++) {
+    const singlepage = await browser.newPage();
+    // Block all js, css, fonts and images for speed
+    await singlepage.setRequestInterception(true);
+    singlepage.on("request", (request) => {
+      const type = request.resourceType();
+      if (type === "document") {
+        request.continue();
+      } else {
+        request.abort();
+      }
+    });
+    pages.push(singlepage);
+  }
+  return pages;
 };
 
 export { createPages };

@@ -13,12 +13,12 @@ const port = process.env.PORT || 3001;
 
 // Sentry configurations
 Sentry.init({
-    dsn: `${process.env.SENTRY_INGEST_URL}`,
-    integrations: [
-        new Sentry.Integrations.Http({ tracing: true }),
-        new Tracing.Integrations.Express({ app }),
-    ],
-    tracesSampleRate: Number(process.env.SENTRY_TRACE_RATE),
+  dsn: `${process.env.SENTRY_INGEST_URL}`,
+  integrations: [
+    new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: Number(process.env.SENTRY_TRACE_RATE),
 });
 app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
 app.use(Sentry.Handlers.tracingHandler());
@@ -37,11 +37,11 @@ app.post("/internal/scrape", writeData);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use((err, req, res, next) => {
-    res.statusCode = 500;
-    res.end(res.sentry + "\n");
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
 });
 
 app.listen(port, () => {
-    console.log(`App is running at http://localhost:${port}.`);
-    console.log("Press ctrl-c to stop.");
+  console.log(`App is running at http://localhost:${port}.`);
+  console.log("Press ctrl-c to stop.");
 });

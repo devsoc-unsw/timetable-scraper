@@ -4,11 +4,11 @@
  * @returns { string }: The campus location that was found
  */
 const getCampusLocation = (campus: string): string => {
-    if (!campus || campus === " ") {
-        console.error(new Error(`Invalid Campus: ${campus}`));
-    }
+  if (!campus || campus === " ") {
+    console.error(new Error(`Invalid Campus: ${campus}`));
+  }
 
-    return campus;
+  return campus;
 };
 
 export { getCampusLocation };

@@ -4,8 +4,8 @@
  * @returns { boolean }: true if the course needs consent, else false
  */
 const getNeedsConsent = (data: string): boolean => {
-    const consentRegex = /[Nn]ot/;
-    return !consentRegex.test(data);
+  const consentRegex = /[Nn]ot/;
+  return !consentRegex.test(data);
 };
 
 export { getNeedsConsent };

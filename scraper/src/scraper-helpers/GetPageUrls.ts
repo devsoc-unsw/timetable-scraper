@@ -1,7 +1,7 @@
 import { getUrls, GetUrlsParams } from "./GetUrls";
 
 interface getPageUrlsParams extends GetUrlsParams {
-    url: string;
+  url: string;
 }
 
 /**
@@ -19,16 +19,16 @@ interface getPageUrlsParams extends GetUrlsParams {
  * Expect: [ '.*html' ]*
  */
 const getPageUrls = async ({ url, page, regex }: getPageUrlsParams): Promise<string[]> => {
-    await page.goto(url, {
-        waitUntil: "networkidle2",
-    });
+  await page.goto(url, {
+    waitUntil: "networkidle2",
+  });
 
-    // Then, get each data url on that page
-    const getDataUrlsParams: GetUrlsParams = {
-        page,
-        regex,
-    };
-    return await getUrls(getDataUrlsParams);
+  // Then, get each data url on that page
+  const getDataUrlsParams: GetUrlsParams = {
+    page,
+    regex,
+  };
+  return await getUrls(getDataUrlsParams);
 };
 
 export { getPageUrls };

@@ -1,10 +1,10 @@
 import {
-    Term,
-    ExtendedTerm,
-    OtherTerms,
-    Class,
-    GetTermFromClassDates,
-    GetTermFromClassReference,
+  Term,
+  ExtendedTerm,
+  OtherTerms,
+  Class,
+  GetTermFromClassDates,
+  GetTermFromClassReference,
 } from "../../scraper-helpers/interfaces";
 
 import { formatDates } from "../../scraper-helpers/FormatDates";
@@ -22,64 +22,64 @@ import { reverseDayAndMonth } from "./ReverseDayAndMonth";
           { start: 11, length: 3 }
  */
 const defaultReferenceDates: GetTermFromClassReference = [
-    {
-        term: Term.Summer,
-        dates: [
-            { start: 11, length: 3 },
-            { start: 12, length: 2 },
-            { start: 1, length: 1 },
-        ],
-    },
-    {
-        term: Term.T1,
-        dates: [
-            { start: 1, length: 2 },
-            { start: 1, length: 3 },
-            { start: 1, length: 4 },
-            { start: 2, length: 1 },
-            { start: 2, length: 3 },
-            { start: 3, length: 1 },
-        ],
-    },
-    {
-        term: Term.T2,
-        dates: [
-            { start: 3, length: 2 },
-            { start: 4, length: 2 },
-            { start: 4, length: 3 },
-            { start: 5, length: 1 },
-            { start: 5, length: 3 },
-            { start: 6, length: 1 },
-            { start: 6, length: 2 },
-            { start: 6, length: 3 },
-            { start: 7, length: 1 },
-            { start: 7, length: 2 },
-            { start: 8, length: 1 },
-        ],
-    },
-    {
-        term: Term.T3,
-        dates: [
-            { start: 8, length: 2 },
-            { start: 8, length: 3 },
-            { start: 9, length: 1 },
-            { start: 9, length: 2 },
-            { start: 9, length: 3 },
-            { start: 10, length: 1 },
-            { start: 10, length: 2 },
-        ],
-    },
-    {
-        term: Term.S1,
-        dates: [{ start: 2, length: 4 }],
-    },
-    { term: Term.S2, dates: [{ start: 7, length: 4 }] },
+  {
+    term: Term.Summer,
+    dates: [
+      { start: 11, length: 3 },
+      { start: 12, length: 2 },
+      { start: 1, length: 1 },
+    ],
+  },
+  {
+    term: Term.T1,
+    dates: [
+      { start: 1, length: 2 },
+      { start: 1, length: 3 },
+      { start: 1, length: 4 },
+      { start: 2, length: 1 },
+      { start: 2, length: 3 },
+      { start: 3, length: 1 },
+    ],
+  },
+  {
+    term: Term.T2,
+    dates: [
+      { start: 3, length: 2 },
+      { start: 4, length: 2 },
+      { start: 4, length: 3 },
+      { start: 5, length: 1 },
+      { start: 5, length: 3 },
+      { start: 6, length: 1 },
+      { start: 6, length: 2 },
+      { start: 6, length: 3 },
+      { start: 7, length: 1 },
+      { start: 7, length: 2 },
+      { start: 8, length: 1 },
+    ],
+  },
+  {
+    term: Term.T3,
+    dates: [
+      { start: 8, length: 2 },
+      { start: 8, length: 3 },
+      { start: 9, length: 1 },
+      { start: 9, length: 2 },
+      { start: 9, length: 3 },
+      { start: 10, length: 1 },
+      { start: 10, length: 2 },
+    ],
+  },
+  {
+    term: Term.S1,
+    dates: [{ start: 2, length: 4 }],
+  },
+  { term: Term.S2, dates: [{ start: 7, length: 4 }] },
 ];
 
 interface CompareClassAndRefDatesParams {
-    startDate: Date;
-    endDate: Date;
-    refDate: GetTermFromClassDates;
+  startDate: Date;
+  endDate: Date;
+  refDate: GetTermFromClassDates;
 }
 
 /**
@@ -100,21 +100,21 @@ interface CompareClassAndRefDatesParams {
  * expect true
  */
 const compareClassAndRefDates = ({
-    startDate,
-    endDate,
-    refDate,
+  startDate,
+  endDate,
+  refDate,
 }: CompareClassAndRefDatesParams): Boolean =>
-    // Compare start date
-    startDate.getMonth() + 1 === refDate.start &&
-    // Compare length in months
-    endDate.getMonth() -
-        startDate.getMonth() +
-        (endDate.getFullYear() - startDate.getFullYear()) * 12 ===
-        refDate.length;
+  // Compare start date
+  startDate.getMonth() + 1 === refDate.start &&
+  // Compare length in months
+  endDate.getMonth() -
+    startDate.getMonth() +
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 ===
+    refDate.length;
 
 interface GetTermFromClassParams {
-    cls: Class;
-    reference?: GetTermFromClassReference;
+  cls: Class;
+  reference?: GetTermFromClassReference;
 }
 
 /**
@@ -126,32 +126,32 @@ interface GetTermFromClassParams {
  * @returns { Term }: Term which the class is from
  */
 const getTermFromClass = ({
-    cls,
-    reference = defaultReferenceDates,
+  cls,
+  reference = defaultReferenceDates,
 }: GetTermFromClassParams): ExtendedTerm => {
-    // Error check
-    if (!cls?.termDates) {
-        throw new Error(`no start and end dates for class: ${JSON.stringify(cls)}`);
+  // Error check
+  if (!cls?.termDates) {
+    throw new Error(`no start and end dates for class: ${JSON.stringify(cls)}`);
+  }
+
+  const [startDate, endDate] = formatDates(
+    [cls.termDates.start, cls.termDates.end].map((date) =>
+      reverseDayAndMonth({ date, delimiter: "/" }),
+    ),
+  );
+
+  for (const termData of reference) {
+    // A term could have any number of start dates
+    for (const refDate of termData.dates) {
+      // If start date and length match, then term is found
+      if (compareClassAndRefDates({ startDate, endDate, refDate })) {
+        return termData.term;
+      }
     }
+  }
 
-    const [startDate, endDate] = formatDates(
-        [cls.termDates.start, cls.termDates.end].map((date) =>
-            reverseDayAndMonth({ date, delimiter: "/" }),
-        ),
-    );
-
-    for (const termData of reference) {
-        // A term could have any number of start dates
-        for (const refDate of termData.dates) {
-            // If start date and length match, then term is found
-            if (compareClassAndRefDates({ startDate, endDate, refDate })) {
-                return termData.term;
-            }
-        }
-    }
-
-    // Could not find a term for the class. Put it in "Other"
-    return OtherTerms.Other;
+  // Could not find a term for the class. Put it in "Other"
+  return OtherTerms.Other;
 };
 
 export { getTermFromClass };

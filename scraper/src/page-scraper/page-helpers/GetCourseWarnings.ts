@@ -1,8 +1,8 @@
 import { CourseHead, CourseWarning, ClassWarnings } from "../../scraper-helpers/interfaces";
 
 interface GetCourseWarningsFromClassWarnings {
-    classWarnings: ClassWarnings[];
-    courseHead: CourseHead;
+  classWarnings: ClassWarnings[];
+  courseHead: CourseHead;
 }
 
 /**
@@ -12,26 +12,26 @@ interface GetCourseWarningsFromClassWarnings {
  * @returns { CourseWarning[] }
  */
 const getCourseWarningsFromClassWarnings = ({
-    classWarnings,
-    courseHead,
+  classWarnings,
+  courseHead,
 }: GetCourseWarningsFromClassWarnings): CourseWarning[] => {
-    if (!courseHead) {
-        throw new Error("Invalid course code and name");
-    }
+  if (!courseHead) {
+    throw new Error("Invalid course code and name");
+  }
 
-    // Encapsulate the classWarnings into courseWarnings for the course
-    // by adding
-    const courseWarnings: CourseWarning[] = [];
-    for (const classWarn of classWarnings) {
-        const courseWarning: CourseWarning = {
-            courseCode: courseHead.courseCode,
-            courseName: courseHead.name,
-            ...classWarn,
-        };
-        courseWarnings.push(courseWarning);
-    }
+  // Encapsulate the classWarnings into courseWarnings for the course
+  // by adding
+  const courseWarnings: CourseWarning[] = [];
+  for (const classWarn of classWarnings) {
+    const courseWarning: CourseWarning = {
+      courseCode: courseHead.courseCode,
+      courseName: courseHead.name,
+      ...classWarn,
+    };
+    courseWarnings.push(courseWarning);
+  }
 
-    return courseWarnings;
+  return courseWarnings;
 };
 
 export { getCourseWarningsFromClassWarnings };

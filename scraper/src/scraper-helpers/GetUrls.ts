@@ -5,8 +5,8 @@ import { extractHrefsFromPage } from "../page-scraper/page-helpers/GetHrefs";
 import { filterUrls } from "../page-scraper/page-helpers/FilterUrls";
 
 interface GetUrlsParams {
-    page: Page;
-    regex: RegExp;
+  page: Page;
+  regex: RegExp;
 }
 
 /**
@@ -18,8 +18,8 @@ interface GetUrlsParams {
  * @returns { Promise<TimetableUrl[]> }: The list of urls on the page, prefixed with @param base
  */
 const getUrls = async ({ page, regex }: GetUrlsParams): Promise<TimetableUrl[]> => {
-    const elements = await page.$$eval(".data a", extractHrefsFromPage);
-    return filterUrls({ elements, regex });
+  const elements = await page.$$eval(".data a", extractHrefsFromPage);
+  return filterUrls({ elements, regex });
 };
 
 export { getUrls, GetUrlsParams };

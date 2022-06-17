@@ -30,11 +30,11 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  * Get the latest term start date from data.json
  */
 const getAvailableTermData = (req: express.Request, res: express.Response) => {
-    try {
-        return res.send(getLatestTermName());
-    } catch (e) {
-        res.status(400).send("Error");
-    }
+  try {
+    return res.send(getLatestTermName());
+  } catch (e) {
+    res.status(400).send("Error");
+  }
 };
 
 /**
@@ -44,46 +44,46 @@ const getAvailableTermData = (req: express.Request, res: express.Response) => {
  * @returns the latest term name
  */
 const getLatestTermName = () => {
-    try {
-        let term: string = "";
-        for (let termId of termArray) {
-            const timetableData = data.timetableData;
-            // Check if the termId exists in the timetableData and the fields are actually
-            // present. If they are, return the term as it is.
-            if (timetableData.hasOwnProperty(termId)) {
-                if (!isClassFound(termId, COURSE_OFFERED_EVERY_TERM)) {
-                    break;
-                }
-                term = termId;
-            }
+  try {
+    let term: string = "";
+    for (let termId of termArray) {
+      const timetableData = data.timetableData;
+      // Check if the termId exists in the timetableData and the fields are actually
+      // present. If they are, return the term as it is.
+      if (timetableData.hasOwnProperty(termId)) {
+        if (!isClassFound(termId, COURSE_OFFERED_EVERY_TERM)) {
+          break;
         }
-
-        return term;
-    } catch (e) {
-        console.error("There was an error getting the most updated term!");
-        return undefined;
+        term = termId;
+      }
     }
+
+    return term;
+  } catch (e) {
+    console.error("There was an error getting the most updated term!");
+    return undefined;
+  }
 };
 
 const isClassFound = (termId: string, courseCode: string) => {
-    const timetableData = data.timetableData;
-    return timetableData[termId].some(
-        (course: { courseCode: string }) => course.courseCode === courseCode,
-    );
+  const timetableData = data.timetableData;
+  return timetableData[termId].some(
+    (course: { courseCode: string }) => course.courseCode === courseCode,
+  );
 };
 
 const getTermStartDate = (termId: string) => {
-    try {
-        // Get the latest term and check the first class of the term
-        // The assumption is that the starting date is the start date of the first class
-        // of the term.
-        const termStartDate =
-            data.timetableData[termId][FIRST_COURSE]["classes"][0]["termDates"]["start"];
-        return termStartDate;
-    } catch (e) {
-        console.error("There was an error getting the term start date!");
-        return undefined;
-    }
+  try {
+    // Get the latest term and check the first class of the term
+    // The assumption is that the starting date is the start date of the first class
+    // of the term.
+    const termStartDate =
+      data.timetableData[termId][FIRST_COURSE]["classes"][0]["termDates"]["start"];
+    return termStartDate;
+  } catch (e) {
+    console.error("There was an error getting the term start date!");
+    return undefined;
+  }
 };
 
 export { getAvailableTermData, getTermStartDate, isClassFound, getLatestTermName };
