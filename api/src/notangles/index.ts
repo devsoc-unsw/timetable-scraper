@@ -1,5 +1,5 @@
 import * as express from "express";
-import { getLatestTermName, getTermStartDate } from "../helper/getTermDataInfo";
+import { getLatestTermName, getTermStartDate } from "../helpers/getTermDataInfo";
 import { data } from "../load-data";
 
 const errorMessage = "Invalid termId/courseId param";

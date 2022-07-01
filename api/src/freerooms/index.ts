@@ -1,5 +1,5 @@
 import * as express from "express";
-import { getLatestTermName, getTermStartDate, termArray } from "../helper/getTermDataInfo";
+import { getLatestTermName, getTermStartDate, termArray } from "../helpers/getTermDataInfo";
 import { data } from "../load-data";
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {

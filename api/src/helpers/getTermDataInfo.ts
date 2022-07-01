@@ -8,9 +8,9 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  * Some notes on the start date for the automation:
  * To start off, there are some assumptions which need to be documented:
  *
- * 1)   The course that is selected as the first class of the term is the one
- *      that is used to get the term date, after
- *      some sanity checks, it was concluded that it works!
+ * 1)   The first class of the first course in the data file
+ *      is used to get the term date (termDates.start).
+ *      After some sanity checks, we concluded that it works!
  *
  * 2)   ECON1101 is the class of interest for which we check if a
  *      particular term data is out or not. This is because it
@@ -31,7 +31,7 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  */
 const getAvailableTermData = (req: express.Request, res: express.Response) => {
   try {
-    return res.send(getLatestTermName());
+    res.send(getLatestTermName());
   } catch (e) {
     res.status(400).send("Error");
   }
@@ -86,4 +86,8 @@ const getTermStartDate = (termId: string) => {
   }
 };
 
-export { getAvailableTermData, getTermStartDate, isClassFound, getLatestTermName };
+const getAllData = (req: express.Request, res: express.Response) => {
+  res.send(data);
+};
+
+export { getAvailableTermData, getTermStartDate, isClassFound, getLatestTermName, getAllData };
