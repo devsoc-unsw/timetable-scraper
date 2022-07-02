@@ -9,7 +9,13 @@ const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
   if (!data) return;
 
-  const res = await axios.post(url, data);
+  const res = await axios({
+    method: "post",
+    url,
+    data,
+    maxContentLength: 100000000,
+    maxBodyLength: 100000000,
+  });
 
   if (res.status === 400) {
     console.error("Error");
