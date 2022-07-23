@@ -74,6 +74,7 @@ const isClassFound = (termId: string, courseCode: string) => {
 
 const getTermStartDate = (termId: string) => {
     try {
+        console.log(termId);
         // Get the latest term and check the first class of the term
         // The assumption is that the starting date is the start date of the first class
         // of the term.
