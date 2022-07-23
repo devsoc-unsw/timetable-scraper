@@ -1,5 +1,6 @@
 import * as express from "express";
 import { data } from "../load-data";
+import { getCurrentTermNameData } from "../freerooms/index";
 export const FIRST_COURSE = 0;
 export const termArray: string[] = ["Summer", "T1", "T2", "T3"];
 const COURSE_OFFERED_EVERY_TERM = "ECON1101";
@@ -29,9 +30,20 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
 /**
  * Get the latest term start date from data.json
  */
-const getAvailableTermData = (req: express.Request, res: express.Response) => {
+const getAvailableTermName = (req: express.Request, res: express.Response) => {
   try {
     res.send(getLatestTermName());
+  } catch (e) {
+    res.status(400).send("Error");
+  }
+};
+
+/**
+ * Get the latest term start date from data.json
+ */
+const getCurrentTermName = (req: express.Request, res: express.Response) => {
+  try {
+    res.send(getCurrentTermNameData());
   } catch (e) {
     res.status(400).send("Error");
   }
@@ -90,4 +102,11 @@ const getAllData = (req: express.Request, res: express.Response) => {
   res.send(data);
 };
 
-export { getAvailableTermData, getTermStartDate, isClassFound, getLatestTermName, getAllData };
+export {
+  getAvailableTermName,
+  getTermStartDate,
+  isClassFound,
+  getLatestTermName,
+  getAllData,
+  getCurrentTermName,
+};

@@ -140,6 +140,18 @@ const inputData = (
  */
 const getStartDate = () => {
   try {
+    return getTermStartDate(getCurrentTermNameData());
+  } catch (e) {
+    return undefined;
+  }
+};
+
+/**
+ * Get the appropriate term date for Freerooms. It will get the current
+ * term date and not the new term date.
+ */
+const getCurrentTermNameData = () => {
+  try {
     // Get the latest term and check the first class of the term
     // The assumption is that the starting date is the start date of the first class
     // of the term.
@@ -162,16 +174,16 @@ const getStartDate = () => {
     // If the data is more than a day old, we will return the term start date that is for the
     // new term, else we get the date for the old term.
     if (isCurrentTerm) {
-      return termStartDate;
+      return mostRecentTerm;
     } else {
       // Checking if the term is the first term, we can have case when index out of bounds
       // as next year's summer rolls over.
       let dummyTerm = Math.max(termArray.findIndex((term) => term === mostRecentTerm) - 1, 0);
-      return getTermStartDate(termArray[dummyTerm]);
+      return termArray[dummyTerm];
     }
   } catch (e) {
     return undefined;
   }
 };
 
-export { getFreeroomsData, getStartDate };
+export { getFreeroomsData, getStartDate, getCurrentTermNameData };
