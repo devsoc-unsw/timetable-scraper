@@ -5,13 +5,19 @@ import { year } from "./config";
 const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
 (async () => {
-    const data = await timetableScraper(year);
+  const data = await timetableScraper(year);
 
-    if (!data) return;
+  if (!data) return;
 
-    const res = await axios.post(url, data);
+  const res = await axios({
+    method: "post",
+    url,
+    data,
+    maxContentLength: 100000000,
+    maxBodyLength: 100000000,
+  });
 
-    if (res.status === 400) {
-        console.error("Error");
-    }
+  if (res.status === 400) {
+    console.error("Error");
+  }
 })();

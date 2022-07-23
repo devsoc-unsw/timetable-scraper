@@ -3,14 +3,14 @@ import { makeClassWarning } from "../class-helpers/MakeClassWarning";
 import { transformHtmlSpecials } from "../class-helpers/TransformHtmlSpecials";
 
 interface GetLocationParams {
-    data: string;
-    classID: number;
-    term: string;
+  data: string;
+  classID: number;
+  term: string;
 }
 
 interface GetLocationReturn {
-    location: string | false;
-    locationWarnings: ClassWarnings[];
+  location: string | false;
+  locationWarnings: ClassWarnings[];
 }
 
 /**
@@ -21,27 +21,27 @@ interface GetLocationReturn {
  * @returns { GetLocationReturn }: The location for the given timing of the class and any warnings associated with parsing issues
  */
 const getLocation = ({ data, classID, term }: GetLocationParams): GetLocationReturn => {
-    let location: string | false = transformHtmlSpecials(data);
-    const locationWarnings: ClassWarnings[] = [];
-    // Check if location exists
-    const locationTesterRegex = /[A-Za-z]/;
-    if (!(location && locationTesterRegex.test(location))) {
-        // Warning: Unknown location!!
-        locationWarnings.push(
-            makeClassWarning({
-                classID,
-                term,
-                errorKey: "location",
-                errorValue: location,
-                tag: WarningTag.UnknownLocation,
-            }),
-        );
+  let location: string | false = transformHtmlSpecials(data);
+  const locationWarnings: ClassWarnings[] = [];
+  // Check if location exists
+  const locationTesterRegex = /[A-Za-z]/;
+  if (!(location && locationTesterRegex.test(location))) {
+    // Warning: Unknown location!!
+    locationWarnings.push(
+      makeClassWarning({
+        classID,
+        term,
+        errorKey: "location",
+        errorValue: location,
+        tag: WarningTag.UnknownLocation,
+      }),
+    );
 
-        // Remove location.
-        location = false;
-    }
+    // Remove location.
+    location = false;
+  }
 
-    return { location, locationWarnings };
+  return { location, locationWarnings };
 };
 
 export { getLocation };

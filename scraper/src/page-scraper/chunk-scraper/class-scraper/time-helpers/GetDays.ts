@@ -6,23 +6,23 @@ import { Day } from "../../../../scraper-helpers/interfaces";
  * @returns { Day[] }: Array of days which the class runs on
  */
 const getDays = (data: string): Day[] => {
-    const splitData = data.split(/, /);
-    if (!splitData || splitData.length === 0) {
-        console.error(new Error(`Invalid days: ${splitData}`));
-    }
+  const splitData = data.split(/, /);
+  if (!splitData || splitData.length === 0) {
+    console.error(new Error(`Invalid days: ${splitData}`));
+  }
 
-    const possibleDays = <Day[]>splitData;
-    const days: Day[] = [];
-    if (!possibleDays) {
-        return days;
-    }
-
-    for (const day of possibleDays) {
-        if (day && Object.values(Day).includes(day)) {
-            days.push(day);
-        }
-    }
+  const possibleDays = <Day[]>splitData;
+  const days: Day[] = [];
+  if (!possibleDays) {
     return days;
+  }
+
+  for (const day of possibleDays) {
+    if (day && Object.values(Day).includes(day)) {
+      days.push(day);
+    }
+  }
+  return days;
 };
 
 export { getDays };

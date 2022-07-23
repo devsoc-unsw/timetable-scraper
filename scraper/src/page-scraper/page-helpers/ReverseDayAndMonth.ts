@@ -1,6 +1,6 @@
 interface reverseDayAndMonthParams {
-    date: string;
-    delimiter: string;
+  date: string;
+  delimiter: string;
 }
 
 /**
@@ -14,8 +14,8 @@ interface reverseDayAndMonthParams {
  *    const rev = reverseDayAndMonth({date: '27/01/2020', delimiter: '/'}) // '01/27/2020'
  */
 const reverseDayAndMonth = ({ date, delimiter }: reverseDayAndMonthParams): string => {
-    const splitDate = date.split(delimiter);
-    return [splitDate[1], splitDate[0], splitDate[2]].join(delimiter);
+  const splitDate = date.split(delimiter);
+  return [splitDate[1], splitDate[0], splitDate[2]].join(delimiter);
 };
 
 export { reverseDayAndMonth };

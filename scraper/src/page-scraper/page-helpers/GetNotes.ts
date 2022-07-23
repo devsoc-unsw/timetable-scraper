@@ -4,13 +4,13 @@
  * @returns { string [] }: All the valid notes found on the page
  */
 const parseNotes = (notes: string[]): string[] => {
-    const cleanNotes: string[] = [];
-    for (const note of notes) {
-        if (note) {
-            cleanNotes.push(note);
-        }
+  const cleanNotes: string[] = [];
+  for (const note of notes) {
+    if (note) {
+      cleanNotes.push(note);
     }
-    return cleanNotes;
+  }
+  return cleanNotes;
 };
 
 export { parseNotes };

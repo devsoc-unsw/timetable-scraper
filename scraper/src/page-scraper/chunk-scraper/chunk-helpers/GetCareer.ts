@@ -6,17 +6,17 @@ import { Career } from "../../../scraper-helpers/interfaces";
  * @returns { Career }: The career that the course is aimed at
  */
 const getCareer = (data: string): Career => {
-    const career = <Career>data;
-    if (!(career && Object.values(Career).includes(career))) {
-        const career2: Career = <Career>data.split(" ")[0];
-        if (!(career2 && Object.values(Career).includes(career2))) {
-            console.error(new Error(`Invalid Career: ${career}`));
-        } else {
-            console.log(`Warning: Career: "${career}" is not in the list of legitimate careers`);
-        }
+  const career = <Career>data;
+  if (!(career && Object.values(Career).includes(career))) {
+    const career2: Career = <Career>data.split(" ")[0];
+    if (!(career2 && Object.values(Career).includes(career2))) {
+      console.error(new Error(`Invalid Career: ${career}`));
+    } else {
+      console.log(`Warning: Career: "${career}" is not in the list of legitimate careers`);
     }
+  }
 
-    return career;
+  return career;
 };
 
 export { getCareer };
