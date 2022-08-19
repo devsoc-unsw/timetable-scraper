@@ -16,7 +16,7 @@
     "@sentry/tracing": "7.11.1",
     "axios": "0.27.2",
     "lodash": "4.17.21",
-    "puppeteer": "14.4.1"
+    "puppeteer": "16.2.0"
   },
   "devDependencies": {
     "@types/lodash": "4.14.184",
