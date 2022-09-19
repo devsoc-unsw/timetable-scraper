@@ -183,7 +183,7 @@ const timetableScraper = async (
               const termlist: ExtendedTerm[] = getTermFromCourse({
                 course: scrapedCourse,
               });
-              if (termlist === []) {
+              if (!termlist.length) {
                 termlist.push(OtherTerms.Other);
               }
               const { notes } = scrapedCourse;
