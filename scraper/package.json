@@ -19,7 +19,7 @@
     "puppeteer": "14.4.1"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.188",
+    "@types/lodash": "4.14.189",
     "@types/puppeteer": "5.4.7",
     "prettier": "2.7.1",
     "typescript": "4.8.4"
