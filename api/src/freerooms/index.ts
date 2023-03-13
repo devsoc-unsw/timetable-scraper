@@ -1,7 +1,9 @@
 import * as express from "express";
 import { getLatestTermName, getTermStartDate, termArray } from "../helpers/getTermDataInfo";
 import { data } from "../load-data";
-import { DateTime } from "luxon";
+
+import { parse, setDay, addWeeks, set } from "date-fns";
+import { zonedTimeToUtc } from "date-fns-tz";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -11,9 +13,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
     const termData = data.timetableData[term];
 
     // Get the start date for the term as a DateTime object
-    const startDT = DateTime
-        .fromFormat(getTermStartDate(term), "dd/MM/yyyy")
-        .setZone("Australia/Sydney");
+    const startDT = parse(getTermStartDate(term), "dd/MM/yyyy", new Date());
 
     let freeroomsData = {};
 
@@ -45,7 +45,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
           let endTime = timeElement["time"]["end"];
           let weeks = timeElement["weeks"];
 
-          const dayDT = startDT.set({weekday: DAYS.indexOf(day)});
+          const dayDT = setDay(startDT, DAYS.indexOf(day));
 
           // case 1: "weeks": "11" (single week)
           // case 2: "weeks": "1-11" (one range of weeks)
@@ -68,7 +68,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
               for (let currentWeek = startWeek; currentWeek <= endWeek; currentWeek++) {
                 inputData(
                   freeroomsData,
-                  dayDT.plus({weeks: currentWeek - 1}),
+                  addWeeks(dayDT, currentWeek - 1),
                   buildingId,
                   roomId,
                   roomName,
@@ -87,7 +87,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
               inputData(
                 freeroomsData,
-                dayDT.plus({weeks: currentWeek - 1}),
+                addWeeks(dayDT, currentWeek - 1),
                 buildingId,
                 roomId,
                 roomName,
@@ -119,7 +119,7 @@ const parseWeek = (week: string) => {
 
 const inputData = (
   freeroomsData: {},
-  currDateTime: DateTime,
+  currDateTime: Date,
   buildingId: string,
   roomId: string,
   roomName: string,
@@ -162,13 +162,13 @@ const inputData = (
  * @param time time in 24hr HH:MM format
  */
 const toUTCString = (
-    day: DateTime,
+    day: Date,
     time: string
 ) => {
-  return day.set({
-    hour: parseInt(time.substring(0, 3)),
-    minute: parseInt(time.substring(3))
-  }).toUTC().toISO();
+  return zonedTimeToUtc(set(day, {
+    hours: parseInt(time.substring(0, 3)),
+    minutes: parseInt(time.substring(3))
+  }), "Australia/Sydney").toISOString();
 }
 
 /**
