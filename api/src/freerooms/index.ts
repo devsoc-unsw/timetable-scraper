@@ -1,11 +1,25 @@
 import * as express from "express";
 import { getLatestTermName, getTermStartDate, termArray } from "../helpers/getTermDataInfo";
 import { data } from "../load-data";
+import dayjs, { Dayjs } from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// Configure day.js weird ass unintuitive plugin system
+dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
   try {
     const term = req.params.termId.substring(5);
     const termData = data.timetableData[term];
+
+    // Get the start date for the term as a tz-aware Dayjs object
+    const startDT = dayjs.tz(getTermStartDate(term), "DD/MM/YYYY", "Australia/Sydney");
 
     let freeroomsData = {};
 
@@ -37,6 +51,9 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
           let endTime = timeElement["time"]["end"];
           let weeks = timeElement["weeks"];
 
+          // Set the day of the week in Dayjs object
+          const dayDT = startDT.day(DAYS.indexOf(day));
+
           // case 1: "weeks": "11" (single week)
           // case 2: "weeks": "1-11" (one range of weeks)
           // case 3: "weeks": "3, 5, 7" (list of individual weeks)
@@ -52,12 +69,13 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
               // turn string into a decimal number after splitting
               // it will be converted back into a string when used as a key in the object
-              let startWeek = parseInt(startRange);
-              let endWeek = parseInt(endRange);
+              let startWeek = parseWeek(startRange);
+              let endWeek = parseWeek(endRange);
 
               for (let currentWeek = startWeek; currentWeek <= endWeek; currentWeek++) {
                 inputData(
                   freeroomsData,
+                  dayDT.add(currentWeek - 1, 'week'),
                   buildingId,
                   roomId,
                   roomName,
@@ -71,10 +89,12 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
             } else {
               // case 2: week is an integer eg. 5
               // turn string into a decimal number for consistency with case 1
-              let currentWeek = parseInt(allWeeks[week]);
+              let currentWeek = parseWeek(allWeeks[week]);
+              if (isNaN(currentWeek)) continue;
 
               inputData(
                 freeroomsData,
+                dayDT.add(currentWeek - 1, 'week'),
                 buildingId,
                 roomId,
                 roomName,
@@ -96,8 +116,17 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
   }
 };
 
+/**
+ * Parse week to integer.
+ * Converts weeks N1..N4 to 11..14
+ */
+const parseWeek = (week: string) => {
+  return parseInt(week.replace("N", "1"));
+}
+
 const inputData = (
   freeroomsData: {},
+  currDateTime: Dayjs,
   buildingId: string,
   roomId: string,
   roomName: string,
@@ -129,10 +158,25 @@ const inputData = (
 
   freeroomsData[buildingId][roomId][currentWeek][day].push({
     courseCode: courseCode,
-    start: startTime,
-    end: endTime,
+    start: toUTCString(currDateTime, startTime),
+    end: toUTCString(currDateTime, endTime),
   });
 };
+
+/**
+ * Converts a class start/end time to UTC ISO format (YYYY-MM-DDThh:mm:ssZ)
+ * @param day day of the class as a Dayjs object
+ * @param time time in 24hr HH:MM format
+ */
+const toUTCString = (
+    day: Dayjs,
+    time: string
+) => {
+  return day
+      .hour(parseInt(time.substring(0, 3)))
+      .minute(parseInt(time.substring(3)))
+      .toISOString();
+}
 
 /**
  * Get the appropriate term date for Freerooms. It will get the current
@@ -170,7 +214,7 @@ const getCurrentTermNameData = () => {
 
     // Getting the difference in time so Freerooms gets the most recent term start date when
     // it starts.
-    const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0 ? true : false;
+    const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0;
     // If the data is more than a day old, we will return the term start date that is for the
     // new term, else we get the date for the old term.
     if (isCurrentTerm) {
