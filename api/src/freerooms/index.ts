@@ -9,7 +9,11 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
   try {
     const term = req.params.termId.substring(5);
     const termData = data.timetableData[term];
-    const termStart = getTermStartDate(term);
+
+    // Get the start date for the term as a DateTime object
+    const startDT = DateTime
+        .fromFormat(getTermStartDate(term), "dd/MM/yyyy")
+        .setZone("Australia/Sydney");
 
     let freeroomsData = {};
 
@@ -41,6 +45,8 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
           let endTime = timeElement["time"]["end"];
           let weeks = timeElement["weeks"];
 
+          const dayDT = startDT.set({weekday: DAYS.indexOf(day)});
+
           // case 1: "weeks": "11" (single week)
           // case 2: "weeks": "1-11" (one range of weeks)
           // case 3: "weeks": "3, 5, 7" (list of individual weeks)
@@ -62,7 +68,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
               for (let currentWeek = startWeek; currentWeek <= endWeek; currentWeek++) {
                 inputData(
                   freeroomsData,
-                  termStart,
+                  dayDT.plus({weeks: currentWeek - 1}),
                   buildingId,
                   roomId,
                   roomName,
@@ -81,7 +87,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
               inputData(
                 freeroomsData,
-                termStart,
+                dayDT.plus({weeks: currentWeek - 1}),
                 buildingId,
                 roomId,
                 roomName,
@@ -107,11 +113,13 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
  * Parse week to integer.
  * Converts weeks N1..N4 to 11..14
  */
-const parseWeek = (week: string) => parseInt(week.replace("N", "1"));
+const parseWeek = (week: string) => {
+  return parseInt(week.replace("N", "1"));
+}
 
 const inputData = (
   freeroomsData: {},
-  termStart: string,
+  currDateTime: DateTime,
   buildingId: string,
   roomId: string,
   roomName: string,
@@ -143,30 +151,24 @@ const inputData = (
 
   freeroomsData[buildingId][roomId][currentWeek][day].push({
     courseCode: courseCode,
-    start: toUTCString(termStart, currentWeek, day, startTime),
-    end: toUTCString(termStart, currentWeek, day, endTime),
+    start: toUTCString(currDateTime, startTime),
+    end: toUTCString(currDateTime, endTime),
   });
 };
 
 /**
  * Converts a class start/end time to UTC ISO format (YYYY-MM-DDThh:mm:ssZ)
- * @param termStart term start date in DD/MM/YYYY format
- * @param week week number
- * @param day day in shortened form e.g. "Mon", "Thu"
+ * @param day day as a luxon DateTime object
  * @param time time in 24hr HH:MM format
  */
 const toUTCString = (
-    termStart: string,
-    week: number,
-    day: string,
+    day: DateTime,
     time: string
 ) => {
-  return DateTime.fromFormat(termStart + time, "dd/MM/yyyyHH:mm")
-      .setZone("Australia/Sydney")
-      .plus({weeks: week - 1})
-      .set({weekday: DAYS.indexOf(day)})
-      .toUTC()
-      .toISO();
+  return day.set({
+    hour: parseInt(time.substring(0, 3)),
+    minute: parseInt(time.substring(3))
+  }).toUTC().toISO();
 }
 
 /**
