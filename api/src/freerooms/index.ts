@@ -1,11 +1,15 @@
 import * as express from "express";
 import { getLatestTermName, getTermStartDate, termArray } from "../helpers/getTermDataInfo";
 import { data } from "../load-data";
+import { DateTime } from "luxon";
+
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const getFreeroomsData = (req: express.Request, res: express.Response) => {
   try {
     const term = req.params.termId.substring(5);
     const termData = data.timetableData[term];
+    const termStart = getTermStartDate(term);
 
     let freeroomsData = {};
 
@@ -58,6 +62,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
               for (let currentWeek = startWeek; currentWeek <= endWeek; currentWeek++) {
                 inputData(
                   freeroomsData,
+                  termStart,
                   buildingId,
                   roomId,
                   roomName,
@@ -75,6 +80,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
               inputData(
                 freeroomsData,
+                termStart,
                 buildingId,
                 roomId,
                 roomName,
@@ -98,6 +104,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
 const inputData = (
   freeroomsData: {},
+  termStart: string,
   buildingId: string,
   roomId: string,
   roomName: string,
@@ -129,10 +136,31 @@ const inputData = (
 
   freeroomsData[buildingId][roomId][currentWeek][day].push({
     courseCode: courseCode,
-    start: startTime,
-    end: endTime,
+    start: toUTCString(termStart, currentWeek, day, startTime),
+    end: toUTCString(termStart, currentWeek, day, endTime),
   });
 };
+
+/**
+ * Converts a class start/end time to UTC ISO format (YYYY-MM-DDThh:mm:ssZ)
+ * @param termStart term start date in DD/MM/YYYY format
+ * @param week week number
+ * @param day day in shortened form e.g. "Mon", "Thu"
+ * @param time time in 24hr HH:MM format
+ */
+const toUTCString = (
+    termStart: string,
+    week: number,
+    day: string,
+    time: string
+) => {
+  return DateTime.fromFormat(termStart + time, "dd/MM/yyyyHH:mm")
+      .setZone("Australia/Sydney")
+      .plus({weeks: +week - 1})
+      .set({weekday: DAYS.indexOf(day)})
+      .toUTC()
+      .toISO();
+}
 
 /**
  * Get the appropriate term date for Freerooms. It will get the current
@@ -170,7 +198,7 @@ const getCurrentTermNameData = () => {
 
     // Getting the difference in time so Freerooms gets the most recent term start date when
     // it starts.
-    const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0 ? true : false;
+    const isCurrentTerm = currDate.valueOf() - termStartDateObj.valueOf() >= 0;
     // If the data is more than a day old, we will return the term start date that is for the
     // new term, else we get the date for the old term.
     if (isCurrentTerm) {
