@@ -56,8 +56,8 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
 
               // turn string into a decimal number after splitting
               // it will be converted back into a string when used as a key in the object
-              let startWeek = parseInt(startRange);
-              let endWeek = parseInt(endRange);
+              let startWeek = parseWeek(startRange);
+              let endWeek = parseWeek(endRange);
 
               for (let currentWeek = startWeek; currentWeek <= endWeek; currentWeek++) {
                 inputData(
@@ -76,7 +76,8 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
             } else {
               // case 2: week is an integer eg. 5
               // turn string into a decimal number for consistency with case 1
-              let currentWeek = parseInt(allWeeks[week]);
+              let currentWeek = parseWeek(allWeeks[week]);
+              if (isNaN(currentWeek)) continue;
 
               inputData(
                 freeroomsData,
@@ -101,6 +102,12 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
     res.status(400).send("Error");
   }
 };
+
+/**
+ * Parse week to integer.
+ * Converts weeks N1..N4 to 11..14
+ */
+const parseWeek = (week: string) => parseInt(week.replace("N", "1"));
 
 const inputData = (
   freeroomsData: {},
@@ -156,7 +163,7 @@ const toUTCString = (
 ) => {
   return DateTime.fromFormat(termStart + time, "dd/MM/yyyyHH:mm")
       .setZone("Australia/Sydney")
-      .plus({weeks: +week - 1})
+      .plus({weeks: week - 1})
       .set({weekday: DAYS.indexOf(day)})
       .toUTC()
       .toISO();
