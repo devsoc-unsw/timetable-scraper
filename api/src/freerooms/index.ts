@@ -18,7 +18,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
     const term = req.params.termId.substring(5);
     const termData = data.timetableData[term];
 
-    // Get the start date for the term as a DateTime object
+    // Get the start date for the term as a tz-aware Dayjs object
     const startDT = dayjs.tz(getTermStartDate(term), "DD/MM/YYYY", "Australia/Sydney");
 
     let freeroomsData = {};
@@ -51,6 +51,7 @@ const getFreeroomsData = (req: express.Request, res: express.Response) => {
           let endTime = timeElement["time"]["end"];
           let weeks = timeElement["weeks"];
 
+          // Set the day of the week in Dayjs object
           const dayDT = startDT.day(DAYS.indexOf(day));
 
           // case 1: "weeks": "11" (single week)
@@ -164,7 +165,7 @@ const inputData = (
 
 /**
  * Converts a class start/end time to UTC ISO format (YYYY-MM-DDThh:mm:ssZ)
- * @param day day as a luxon DateTime object
+ * @param day day of the class as a Dayjs object
  * @param time time in 24hr HH:MM format
  */
 const toUTCString = (
