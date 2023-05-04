@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sentry/node": "7.50.0",
-    "@sentry/tracing": "7.50.0",
+    "@sentry/node": "7.51.0",
+    "@sentry/tracing": "7.51.0",
     "cors": "2.8.5",
     "dayjs": "1.11.7",
     "express": "4.18.2"
