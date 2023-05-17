@@ -44,6 +44,7 @@ enum Career {
   Postgraduate = "Postgraduate",
   PGOnline = "Postgraduate (Online)",
   Research = "Research",
+  NonAward = "Non-Award",
 }
 
 /**
