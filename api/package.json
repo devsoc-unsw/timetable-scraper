@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ./dist/server.js",
+    "start:local": "NODE_ENV=development node ./dist/server.js",
     "format": "prettier --write ."
   },
   "author": "",
@@ -12,8 +13,10 @@
   "dependencies": {
     "@sentry/node": "7.52.1",
     "@sentry/tracing": "7.52.1",
+    "@types/node": "^20.1.7",
     "cors": "2.8.5",
     "dayjs": "1.11.7",
+    "dotenv-flow": "3.2.0",
     "express": "4.18.2"
   },
   "devDependencies": {

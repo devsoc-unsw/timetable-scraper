@@ -9,6 +9,7 @@ import { writeData } from "./write-data";
 import { getAllData, getAvailableTermName, getCurrentTermName } from "./helpers/getTermDataInfo";
 import { getStartDateByRouteParams } from "./controllers/getStartDate.controller";
 const app = express();
+
 const port = process.env.PORT || 3001;
 
 // Sentry configurations
