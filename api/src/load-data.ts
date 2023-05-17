@@ -1,5 +1,8 @@
 import fs from "fs";
-export const dataLocation = "/data/data.json";
+import * as dotenv from 'dotenv-flow';
+
+dotenv.config();
+export const dataLocation =  process.env.DATA_LOCATION || "/data/data.json";
 
 interface Data {
   timetableData: object;

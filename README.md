@@ -10,15 +10,12 @@ In two separate terminals, `cd` into `/api` and `/scraper` and run `yarn` in bot
 
 To run the scraper locally, first start the API, then run the scraper script.
 
-The following steps may seem slightly weird because the code was designed with deployment in mind, hence some adjustments are required to be made to run it locally.
-
 ### API
 
-First change line 2 of `/api/src/load-data.ts` to `../data/data.json`. Make sure you change this back before pushing!
-
-Next, in the terminal for `/api`, run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `SENTRY_INGEST_URL='' npm start` to start the server.
+in the terminal for `/api`, run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `npm run start:local` to start the server.
 
 ### Scraper
+> Note: you may need to install [Chrome](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps#install-google-chrome-for-linux)
 
 First, in the terminal for `/scraper` run `npm run build` to transpile the Typescript code to Javascript. Once this is done, run `npm run scrape` to start the scraper. Ensure that the server is running before the scraper is run.
 

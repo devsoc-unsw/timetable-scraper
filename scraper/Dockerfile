@@ -1,4 +1,4 @@
-FROM node:18.16.0-alpine as builder
+FROM node:20.0.0-alpine as builder
 WORKDIR /app
 
 COPY package.json yarn.lock ./
@@ -7,10 +7,10 @@ RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn build
 
-FROM node:18.16.0-alpine as runner
+FROM node:20.0.0-alpine as runner
 ENV NODE_ENV production
 
-# Installs latest Chromium (92) package.
+# Installs latest Chromium (100) package.
 RUN apk add --no-cache \
       chromium \
       nss \
