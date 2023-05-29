@@ -3,14 +3,12 @@ import { cloneDeep } from "lodash";
 
 import {
   TimetableData,
-  UrlList,
   ExtendedTerm,
   CourseWarning,
   OtherTerms,
 } from "./scraper-helpers/interfaces";
 import { getTermFromCourse } from "./scraper-helpers/GetTermFromCourse";
 import { getUrls } from "./scraper-helpers/GetUrls";
-import { getPageUrls } from "./scraper-helpers/GetPageUrls";
 import { scrapePage } from "./page-scraper/PageScraper";
 import { keysOf } from "./scraper-helpers/KeysOf";
 import { createPages } from "./scraper-helpers/CreatePages";
@@ -77,13 +75,6 @@ const timetableScraper = async (
     args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu"],
   });
   try {
-    const batchsize = 50;
-    // Create batchsize pages to scrape each course
-    const pages = await createPages({
-      browser,
-      batchsize,
-    });
-    const page = pages[0];
     // Base url to be used for all scraping
     const base = `http://timetable.unsw.edu.au/${year}/`;
 
@@ -102,51 +93,43 @@ const timetableScraper = async (
     // CourseWarning array for any fields not aligning with the strict requirements
     const courseWarnings: CourseWarning[] = [];
 
-    // Go to the page with list of subjects (Accounting, Computers etc)
-    await page.goto(base, {
-      waitUntil: "networkidle2",
-    });
-
     // Defining the regex for course scraping...
     const courseUrlRegex = /([A-Z]{8})\.html/;
 
-    // Gets all the dataurls on the timetable page.
+    // Gets all the dataurls on the page with list of subjects (Accounting, Computers etc)
     const urlList = await getUrls({
-      page,
+      url: base,
       regex: courseUrlRegex,
     });
 
     // Defining the regex for each of the subject codes...
     const subjectUrlRegex = /([A-Z]{4}[0-9]{4})\.html/;
 
-    // Jobs -> urls of each subject
-    let jobs: UrlList = [];
+    // List of promises that are being resolved
+    const promises: Promise<string[]>[] = [];
 
     // Scrape all the urls from the subject pages (eg: COMPKENS, etc)
-    for (let url = 0; url < urlList.length; ) {
-      // List of promises that are being resolved
-      const promises: Promise<string[]>[] = [];
-      // array of resolved promises from the promises array
-      let result: UrlList[] = [];
-
+    for (let i = 0; i < urlList.length; i++) {
       // Open a different url on a different page
-      for (let i = 0; i < batchsize && url < urlList.length; i++) {
-        const urls = getPageUrls({
-          url: urlList[url],
-          page: pages[i],
-          regex: subjectUrlRegex,
-        });
-        promises.push(urls);
-        url++;
-      }
-      // Wait for all the pages
-      result = await Promise.all(promises);
-
-      // Then add them to the jobs queue
-      for (const pageurls of result) {
-        jobs = jobs.concat(pageurls);
-      }
+      const urls = getUrls({
+        url: base + urlList[i],
+        regex: subjectUrlRegex,
+      });
+      promises.push(urls);
     }
+
+    // Wait for all the pages
+    const result = await Promise.all(promises);
+
+    // Jobs -> urls of each subject
+    const jobs = result.flat().map(url => base + url);
+
+    const batchsize = 50;
+    // Create batchsize pages to scrape each course
+    const pages = await createPages({
+      browser,
+      batchsize,
+    });
 
     // Now scrape each page in the jobs queue and then add it to the scraped
     // array
