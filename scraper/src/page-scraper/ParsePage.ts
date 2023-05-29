@@ -188,7 +188,7 @@ const parsePage = (elements: Element[]): PageData[] => {
       if (data) {
         const { classChunks, courseInfoChunk } = extractChunks(element);
 
-        if (courseInfoChunk) {
+        if (courseInfoChunk && !courseInfo) {
           courseInfo = courseInfoChunk;
         }
 
