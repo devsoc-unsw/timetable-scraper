@@ -1,4 +1,3 @@
-import puppeteer from "puppeteer";
 import { load, CheerioAPI } from 'cheerio';
 
 import {
