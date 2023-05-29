@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import { load, CheerioAPI } from 'cheerio';
 
 import {
   Chunk,
@@ -16,15 +17,16 @@ import { parsePage } from "./ParsePage";
 import { parseNotes } from "./page-helpers/GetNotes";
 import { getClassesByTerm } from "./page-helpers/GetClassesByTerm";
 import { getCourseWarningsFromClassWarnings } from "./page-helpers/GetCourseWarnings";
+import axios from 'axios';
 
 /**
  * Breaks the page down into relevant chunks from which data can be extracted
- * @param { puppeteer.Page } page: page to be broken down into chunks
+ * @param { CheerioAPI } $: Cheerio API loaded with page to be broken down into chunks
  * @returns { Promise<PageData[]> }: Extracted data as a course info chunk and list of class chunks to be parsed
  */
-const getChunks = async (page: puppeteer.Page): Promise<PageData[]> => {
-  const tableSelector: string = '[class="formBody"][colspan="3"]';
-  return await page.$$eval(tableSelector, parsePage);
+const getChunks = async ($: CheerioAPI): Promise<PageData[]> => {
+  const table = $('td.formBody[colspan="3"]').get();
+  return parsePage(table);
 };
 
 interface GetCourseInfoAndNotesParams {
@@ -63,10 +65,14 @@ type ScrapePageReturn = Promise<ScrapePageReturnSync>;
 /**
  * Function scrapes all the course data on the given page
  * Returns an array of courses on the page
- * @param { puppeteer.Page } page Page to be scraped
+ * @param { string } url url to be scraped
  * @returns { ScrapePageReturn }: All the data on the current page, along with all the courseWarnings found on that page
  */
-const scrapePage = async (page: puppeteer.Page): ScrapePageReturn => {
+const scrapePage = async (url: string): ScrapePageReturn => {
+  // Load the page
+  const response = await axios.get(url);
+  const $ = load(response.data);
+
   const coursesData: TimetableData = {
     Summer: [],
     T1: [],
@@ -77,7 +83,7 @@ const scrapePage = async (page: puppeteer.Page): ScrapePageReturn => {
     Other: [],
   };
   const courseWarnings: CourseWarning[] = [];
-  const pageChunks: PageData[] = await getChunks(page);
+  const pageChunks: PageData[] = await getChunks($);
 
   for (const course of pageChunks) {
     if (!course) {
@@ -87,10 +93,10 @@ const scrapePage = async (page: puppeteer.Page): ScrapePageReturn => {
     let courseHead: CourseHead;
     try {
       // Get course code and name, that is not a chunk
-      courseHead = await getCourseHeadChunk(page);
+      courseHead = await getCourseHeadChunk($);
       const parsedData = getCourseInfoAndNotes({
         courseInfo: course.courseInfo,
-        url: page.url(),
+        url,
       });
       const { courseInfo } = parsedData;
       const notes = parseNotes(parsedData.notes);
@@ -134,6 +140,7 @@ const scrapePage = async (page: puppeteer.Page): ScrapePageReturn => {
       throw new Error(err);
     }
   }
+
   return { coursesData, courseWarnings };
 };
 
