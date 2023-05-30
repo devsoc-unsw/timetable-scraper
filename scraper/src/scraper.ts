@@ -99,6 +99,7 @@ const timetableScraper = async (
     // Gets all the dataurls on the page with list of subjects (Accounting, Computers etc)
     const urlList = await getUrls({
       url: base,
+      base,
       regex: courseUrlRegex,
     });
 
@@ -112,7 +113,8 @@ const timetableScraper = async (
     for (let i = 0; i < urlList.length; i++) {
       // Open a different url on a different page
       const urls = getUrls({
-        url: base + urlList[i],
+        url: urlList[i],
+        base,
         regex: subjectUrlRegex,
       });
       promises.push(urls);
@@ -122,7 +124,7 @@ const timetableScraper = async (
     const result = await Promise.all(promises);
 
     // Jobs -> urls of each subject
-    const jobs = result.flat().map(url => base + url);
+    const jobs = result.flat();
 
     const batchsize = 50;
     // Create batchsize pages to scrape each course
