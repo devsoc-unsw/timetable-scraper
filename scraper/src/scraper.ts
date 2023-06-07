@@ -1,40 +1,10 @@
 import { cloneDeep } from "lodash";
 
-import {
-  TimetableData,
-  ExtendedTerm,
-  CourseWarning,
-  OtherTerms,
-} from "./scraper-helpers/interfaces";
+import { CourseWarning, ExtendedTerm, OtherTerms, TimetableData, } from "./scraper-helpers/interfaces";
 import { getTermFromCourse } from "./scraper-helpers/GetTermFromCourse";
 import { getUrls } from "./scraper-helpers/GetUrls";
 import { scrapePage } from "./page-scraper/PageScraper";
 import { keysOf } from "./scraper-helpers/KeysOf";
-
-interface ScrapeSubjectParams {
-  url: string;
-}
-
-/**
- * Async wrapper to scrape multiple subjects at once
- * This scrapes one subject
- *
- * @param {string} url - url to scrape the subject from
- * @returns {Promise<{ courseData: TimetableData; warnings: Warning[] }} The data that has been scraped, classified into one of 6 terms. If the scraper is unable to classify courses, then it will group them under 'Other'
- * @example
- *    const browser = await puppeteer.launch()
- *    const data = scrapeSubject('http://timetable.unsw.edu.au/2019/COMP1511.html')
- */
-const scrapeSubject = async ({
-  url
-}: ScrapeSubjectParams): Promise<{
-  coursesData: TimetableData;
-  courseWarnings: CourseWarning[];
-}> => {
-  // Get all relevant data for one page
-  // eslint-disable-next-line no-return-await
-  return await scrapePage(url);
-};
 
 /**
  * The scraper that scrapes the timetable site
@@ -122,9 +92,7 @@ const timetableScraper = async (
         courseWarnings: CourseWarning[];
       }>[] = [];
       for (let i = 0; i < batchsize && job < jobs.length; i++) {
-        const data = scrapeSubject({
-          url: jobs[job],
-        });
+        const data = scrapePage(jobs[job]);
         promises.push(data);
         job++;
       }
@@ -183,6 +151,3 @@ const timetableScraper = async (
 };
 
 export { timetableScraper };
-
-// Development only
-export { scrapeSubject };

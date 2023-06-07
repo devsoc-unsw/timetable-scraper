@@ -5,7 +5,9 @@ import { year } from "./config";
 const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
 (async () => {
+  console.time("Scraping");
   const data = await timetableScraper(year);
+  return console.timeEnd("Scraping");
 
   if (!data) return;
 
