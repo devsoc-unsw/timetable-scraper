@@ -32,6 +32,8 @@ const COURSE_OFFERED_EVERY_TERM = "ECON1101";
  */
 const getAvailableTermName = (req: express.Request, res: express.Response) => {
   try {
+    // forcing client to revalidate cache if data has changed
+    res.set('Cache-Control', 'must-revalidate');
     res.send(getLatestTermName());
   } catch (e) {
     res.status(400).send("Error");
