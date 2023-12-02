@@ -1,14 +1,21 @@
 import axios from "axios";
 import { timetableScraper } from "./scraper";
 import { year } from "./config";
+import { getMergedTimetableData } from "./scraper-helpers/HandleTermData";
 
 const url = process.env.API_URL || "http://localhost:3001/internal/scrape";
 
 (async () => {
-  const data = await timetableScraper(year);
+  let data = await timetableScraper(year);
+  const nextYearsData = await timetableScraper(year + 1);
 
-  if (!data) return;
-
+  if (!data) return; // There is a problem if it is a return here
+  if (nextYearsData) {
+    const minUpdated = Math.min(nextYearsData.lastUpdated, data.lastUpdated);
+    data.courseWarnings.concat(nextYearsData.courseWarnings);
+    data.timetableData = getMergedTimetableData(data.timetableData, nextYearsData.timetableData);
+    data.lastUpdated = minUpdated;
+  }
   const res = await axios({
     method: "post",
     url,
