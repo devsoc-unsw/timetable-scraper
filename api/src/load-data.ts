@@ -16,11 +16,15 @@ let data: Data = {
 let timer: ReturnType<typeof setTimeout> | null = null;
 
 const loadData = (eventType?: string) => {
-  const f = () => {
-    data = JSON.parse(fs.readFileSync(dataLocation, "utf8"));
-    console.log(`Loaded data (written at ${data.lastUpdated}).`);
-  };
-
+  try {
+    const f = () => {
+      data = JSON.parse(fs.readFileSync(dataLocation, "utf8"));
+      console.log(`Loaded data (written at ${data.lastUpdated}).`);
+    };
+  } catch (err) {
+      console.log(`Failed loading data error ${err}.`);
+  }
+  
   if (eventType) {
     if (timer != null) {
       clearTimeout(timer);
