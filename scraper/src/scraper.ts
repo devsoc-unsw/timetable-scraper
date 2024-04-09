@@ -32,7 +32,7 @@ const timetableScraper = async (
 > => {
   try {
     // Base url to be used for all scraping
-    const base = `http://timetable.unsw.edu.au/${year}/`;
+    const base = `https://timetable.unsw.edu.au/${year}/`;
 
     // JSON Array to store the course data.
     // There are no cases which cannot be classified. (Yet)
@@ -54,7 +54,7 @@ const timetableScraper = async (
 
     // Gets all the dataurls on the page with list of subjects (Accounting, Computers etc)
     const urlList = await getUrls({
-      url: base,
+      url: base + "subjectSearch.html",
       base,
       regex: courseUrlRegex,
     });
