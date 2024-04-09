@@ -90,6 +90,8 @@ const getCourseList = (req: express.Request, res: express.Response) => {
         resCourses.courses.push(courseSummary);
       }
 
+      // forcing client to revalidate cache if data has changed
+      res.set('Cache-Control', 'must-revalidate');
       res.json(resCourses);
     } else {
       res.status(400).send(errorMessage);

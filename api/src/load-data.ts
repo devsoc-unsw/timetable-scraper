@@ -33,6 +33,10 @@ const loadData = (eventType?: string) => {
   }
 };
 
+if (!fs.existsSync(dataLocation)) {
+  fs.writeFileSync(dataLocation, JSON.stringify(data));
+}
+
 fs.watch(dataLocation, loadData);
 
 loadData();
