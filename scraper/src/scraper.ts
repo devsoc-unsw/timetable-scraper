@@ -103,7 +103,7 @@ const timetableScraper = async (
     const courseWarnings: CourseWarning[] = [];
 
     // Go to the page with list of subjects (Accounting, Computers etc)
-    await page.goto(base, {
+    await page.goto(base + "subjectSearch.html", {
       waitUntil: "networkidle2",
     });
 
