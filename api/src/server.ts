@@ -7,7 +7,6 @@ import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
 import { getAllData, getAvailableTermName, getCurrentTermName, getCurrentTermDate } from "./helpers/getTermDataInfo";
-// import { getStartDateByRouteParams } from "./controllers/getStartDate.controller";
 const app = express();
 const port = process.env.PORT || 3001;
 
