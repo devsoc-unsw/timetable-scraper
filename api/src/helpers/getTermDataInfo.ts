@@ -41,11 +41,22 @@ const getAvailableTermName = (req: express.Request, res: express.Response) => {
 };
 
 /**
- * Get the latest term start date from data.json
+ * Get the previous/current term from data.json
  */
 const getCurrentTermName = (req: express.Request, res: express.Response) => {
   try {
     res.send(getCurrentTermNameData());
+  } catch (e) {
+    res.status(400).send("Error");
+  }
+};
+
+/**
+ * Get the previous/current term start date from data.json
+ */
+const getCurrentTermDate = (req: express.Request, res: express.Response) => {
+  try {
+    res.send(getTermStartDate(getCurrentTermNameData()));
   } catch (e) {
     res.status(400).send("Error");
   }
@@ -108,6 +119,7 @@ export {
   getAvailableTermName,
   getTermStartDate,
   isClassFound,
+  getCurrentTermDate,
   getLatestTermName,
   getAllData,
   getCurrentTermName,
