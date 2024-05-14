@@ -104,7 +104,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 /**
  * Get the latest term start date from data.json
  */
-const getStartDate = () => {
+const getLatestStartDate = () => {
   try {
     // Get the latest term and check the first class of the term
     // The assumption is that the starting date is the start date of the first class
@@ -118,4 +118,4 @@ const getStartDate = () => {
   }
 };
 
-export { getCourse, getCourseList, getStartDate };
+export { getCourse, getCourseList, getLatestStartDate };

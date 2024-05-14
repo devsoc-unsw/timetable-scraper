@@ -6,8 +6,7 @@ import * as Tracing from "@sentry/tracing";
 import * as notangles from "./notangles/index";
 import * as freerooms from "./freerooms/index";
 import { writeData } from "./write-data";
-import { getAllData, getAvailableTermName, getCurrentTermName } from "./helpers/getTermDataInfo";
-import { getStartDateByRouteParams } from "./controllers/getStartDate.controller";
+import { getAllData, getAvailableTermName, getCurrentTermName, getCurrentTermDate } from "./helpers/getTermDataInfo";
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -31,8 +30,9 @@ app.get("/api/terms/:termId/courses", notangles.getCourseList);
 app.get("/api/terms/:termId/freerooms", freerooms.getFreeroomsData);
 
 app.get("/api/availableterm/", getAvailableTermName);
+app.get("/api/availablestartdate/", notangles.getLatestStartDate);
 app.get("/api/currentterm/", getCurrentTermName);
-app.get("/api/startdate/:client", getStartDateByRouteParams);
+app.get("/api/currentstartdate/", getCurrentTermDate);
 
 app.post("/internal/scrape", writeData);
 app.get("/internal/dump", getAllData);
