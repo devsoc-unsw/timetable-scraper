@@ -104,17 +104,16 @@ const getCourseList = (req: express.Request, res: express.Response) => {
 /**
  * Get the latest term start date from data.json
  */
-const getLatestStartDate = () => {
+const getLatestStartDate = (req: express.Request, res: express.Response) => {
   try {
     // Get the latest term and check the first class of the term
     // The assumption is that the starting date is the start date of the first class
     // of the term.
     const mostRecentTerm = getLatestTermName();
 
-    const termStartDate = getTermStartDate(mostRecentTerm);
-    return termStartDate;
+    res.send(getTermStartDate(mostRecentTerm));
   } catch (e) {
-    return undefined;
+    res.status(400).send("Error");
   }
 };
 
