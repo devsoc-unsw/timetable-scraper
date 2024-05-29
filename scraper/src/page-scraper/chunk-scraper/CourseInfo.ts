@@ -5,6 +5,7 @@ import { isTerm } from "./chunk-helpers/IsTerm";
 import { getSchool } from "./chunk-helpers/GetSchool";
 import { getCampusLocation } from "./chunk-helpers/GetCampusLocation";
 import { getCareer } from "./chunk-helpers/GetCareer";
+import { getFaculty } from "./chunk-helpers/GetFaculty";
 
 /**
  * @interface: Indices of all the data that can be extracted from the courseInfo chunk
@@ -24,6 +25,7 @@ interface CourseInfoIndices {
  */
 const defaultParseIndices: CourseInfoIndices = {
   schoolIndex: 1,
+  facultyIndex: 2,
   campusIndex: 3,
   careerIndex: 4,
   nextParseIndex: 5,
@@ -53,6 +55,7 @@ const parseCourseInfoChunk = ({
   const school = getSchool(data[parseIndices.schoolIndex]);
   const campus = getCampusLocation(data[parseIndices.campusIndex]);
   const career = getCareer(data[parseIndices.careerIndex]);
+  const faculty = getFaculty(data[parseIndices.facultyIndex]);
 
   let index = parseIndices.nextParseIndex;
   const termsOffered: string[] = [];
@@ -73,6 +76,7 @@ const parseCourseInfoChunk = ({
 
   const courseInfo: CourseInfo = {
     school,
+    faculty,
     campus,
     career,
     termsOffered,

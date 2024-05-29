@@ -185,6 +185,7 @@ interface CourseHead {
  */
 interface CourseInfo {
   school: string;
+  faculty: string;
   campus: string;
   career: string;
   censusDates: string[];
