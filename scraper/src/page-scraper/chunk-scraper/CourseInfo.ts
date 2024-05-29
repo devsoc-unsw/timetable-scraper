@@ -11,7 +11,7 @@ import { getFaculty } from "./chunk-helpers/GetFaculty";
  * @interface: Indices of all the data that can be extracted from the courseInfo chunk
  */
 interface CourseInfoIndices {
-  facultyIndex?: number;
+  facultyIndex: number;
   schoolIndex: number;
   onlineHandbookRecordIndex?: number;
   campusIndex: number;
@@ -21,11 +21,10 @@ interface CourseInfoIndices {
 
 /**
  * @constant { CourseInfoIndices }: Default indices which represent which index to grab data from.
- * The schoolIndex is not 0 because there is a column for an &nbsp in the table
  */
 const defaultParseIndices: CourseInfoIndices = {
+  facultyIndex: 0,
   schoolIndex: 1,
-  facultyIndex: 2,
   campusIndex: 3,
   careerIndex: 4,
   nextParseIndex: 5,
