@@ -68,6 +68,7 @@ const getCourseList = (req: express.Request, res: express.Response) => {
           career: termCourses[i].career,
           online: false,
           inPerson: false,
+          faculty: termCourses[i].faculty,
         };
 
         const classes = termCourses[i].classes;
