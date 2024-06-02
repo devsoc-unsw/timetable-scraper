@@ -1,11 +1,10 @@
 import { Chunk, CourseInfo } from "../../scraper-helpers/interfaces";
-
-import { isCensusDate } from "./chunk-helpers/IsCensusDate";
-import { isTerm } from "./chunk-helpers/IsTerm";
-import { getSchool } from "./chunk-helpers/GetSchool";
 import { getCampusLocation } from "./chunk-helpers/GetCampusLocation";
 import { getCareer } from "./chunk-helpers/GetCareer";
 import { getFaculty } from "./chunk-helpers/GetFaculty";
+import { getSchool } from "./chunk-helpers/GetSchool";
+import { isCensusDate } from "./chunk-helpers/IsCensusDate";
+import { isTerm } from "./chunk-helpers/IsTerm";
 
 /**
  * @interface: Indices of all the data that can be extracted from the courseInfo chunk
