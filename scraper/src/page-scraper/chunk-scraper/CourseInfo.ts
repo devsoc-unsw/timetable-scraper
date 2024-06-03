@@ -1,16 +1,16 @@
 import { Chunk, CourseInfo } from "../../scraper-helpers/interfaces";
-
-import { isCensusDate } from "./chunk-helpers/IsCensusDate";
-import { isTerm } from "./chunk-helpers/IsTerm";
-import { getSchool } from "./chunk-helpers/GetSchool";
 import { getCampusLocation } from "./chunk-helpers/GetCampusLocation";
 import { getCareer } from "./chunk-helpers/GetCareer";
+import { getFaculty } from "./chunk-helpers/GetFaculty";
+import { getSchool } from "./chunk-helpers/GetSchool";
+import { isCensusDate } from "./chunk-helpers/IsCensusDate";
+import { isTerm } from "./chunk-helpers/IsTerm";
 
 /**
  * @interface: Indices of all the data that can be extracted from the courseInfo chunk
  */
 interface CourseInfoIndices {
-  facultyIndex?: number;
+  facultyIndex: number;
   schoolIndex: number;
   onlineHandbookRecordIndex?: number;
   campusIndex: number;
@@ -20,9 +20,9 @@ interface CourseInfoIndices {
 
 /**
  * @constant { CourseInfoIndices }: Default indices which represent which index to grab data from.
- * The schoolIndex is not 0 because there is a column for an &nbsp in the table
  */
 const defaultParseIndices: CourseInfoIndices = {
+  facultyIndex: 0,
   schoolIndex: 1,
   campusIndex: 3,
   careerIndex: 4,
@@ -53,6 +53,7 @@ const parseCourseInfoChunk = ({
   const school = getSchool(data[parseIndices.schoolIndex]);
   const campus = getCampusLocation(data[parseIndices.campusIndex]);
   const career = getCareer(data[parseIndices.careerIndex]);
+  const faculty = getFaculty(data[parseIndices.facultyIndex]);
 
   let index = parseIndices.nextParseIndex;
   const termsOffered: string[] = [];
@@ -73,6 +74,7 @@ const parseCourseInfoChunk = ({
 
   const courseInfo: CourseInfo = {
     school,
+    faculty,
     campus,
     career,
     termsOffered,
