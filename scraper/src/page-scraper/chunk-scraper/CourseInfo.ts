@@ -61,7 +61,7 @@ const parseCourseInfoChunk = ({
   const notes: string[] = [];
   // Find all the terms the course runs in
   while (index < data.length) {
-    if (isTerm(data[index])) {
+    if (isTerm(data[index]) && !termsOffered.includes(data[index])) {
       termsOffered.push(data[index]);
     }
 
