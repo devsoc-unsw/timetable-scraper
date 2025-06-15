@@ -12,8 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@sentry/browser": "7.92.0",
-    "@sentry/node": "7.92.0",
-    "@sentry/tracing": "7.92.0",
+    "@sentry/node": "7.120.3",
+    "@sentry/tracing": "7.120.3",
     "axios": "0.27.2",
     "lodash": "4.17.21",
     "puppeteer": "14.4.1"
