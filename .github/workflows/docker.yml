@@ -40,8 +40,8 @@ jobs:
           platforms: linux/amd64
           file: ${{ matrix.component }}/Dockerfile
           tags: |
-            ghcr.io/csesoc/timetable-${{ matrix.component }}:${{ github.sha }}
-            ghcr.io/csesoc/timetable-${{ matrix.component }}:latest
+            ghcr.io/devsoc-unsw/timetable-${{ matrix.component }}:${{ github.sha }}
+            ghcr.io/devsoc-unsw/timetable-${{ matrix.component }}:latest
           labels: ${{ steps.meta.outputs.labels }}
   deploy:
     name: Deploy (CD)
